@@ -28,7 +28,7 @@ var (
 )
 
 // EthABI is the input ABI used to generate the binding from.
-const EthABI = "[{\"constant\":true,\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_tos\",\"type\":\"address[]\"},{\"name\":\"_values\",\"type\":\"uint256[]\"}],\"name\":\"multiTransfer\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"name\":\"\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"kill\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newAdmin\",\"type\":\"address\"}],\"name\":\"changeAdmin\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"},{\"name\":\"initPercent\",\"type\":\"uint8\"},{\"name\":\"periods\",\"type\":\"uint256[]\"},{\"name\":\"percents\",\"type\":\"uint8[]\"}],\"name\":\"addRule\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"},{\"name\":\"timeT\",\"type\":\"uint256\"}],\"name\":\"addTimeT\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_target\",\"type\":\"address\"},{\"name\":\"_freeze\",\"type\":\"bool\"}],\"name\":\"freeze\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_target\",\"type\":\"address\"}],\"name\":\"getFrozenAccount\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_targets\",\"type\":\"address[]\"},{\"name\":\"_freezes\",\"type\":\"bool[]\"}],\"name\":\"multiFreeze\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferfix\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_target\",\"type\":\"address\"},{\"name\":\"_timestamp\",\"type\":\"uint256\"}],\"name\":\"freezeWithTimestamp\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_targets\",\"type\":\"address[]\"},{\"name\":\"_timestamps\",\"type\":\"uint256[]\"}],\"name\":\"multiFreezeWithTimestamp\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_owner\",\"type\":\"address\"},{\"name\":\"_spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"removeRule\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"_target\",\"type\":\"address\"}],\"name\":\"getFrozenTimestamp\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"name\":\"tokenName\",\"type\":\"string\"},{\"name\":\"tokenSymbol\",\"type\":\"string\"},{\"name\":\"tokenDecimals\",\"type\":\"uint8\"},{\"name\":\"totalTokenSupply\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"spender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"}]"
+const EthABI = "[{\"constant\":false,\"inputs\":[{\"name\":\"_spender\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newAllowMapping\",\"type\":\"bool\"}],\"name\":\"changeAllowMapping\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_tos\",\"type\":\"address[]\"},{\"name\":\"_values\",\"type\":\"uint256[]\"}],\"name\":\"multiTransfer\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"kill\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"address\"}],\"name\":\"register\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newThreshold\",\"type\":\"uint256\"}],\"name\":\"changeThreshold\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"yottaCoin\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"newAdmin\",\"type\":\"address\"}],\"name\":\"changeAdmin\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"},{\"name\":\"initPercent\",\"type\":\"uint8\"},{\"name\":\"periods\",\"type\":\"uint256[]\"},{\"name\":\"percents\",\"type\":\"uint8[]\"}],\"name\":\"addRule\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"},{\"name\":\"timeT\",\"type\":\"uint256\"}],\"name\":\"addTimeT\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_to\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"allowMapping\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_target\",\"type\":\"address\"},{\"name\":\"_freeze\",\"type\":\"bool\"}],\"name\":\"freeze\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_targets\",\"type\":\"address[]\"},{\"name\":\"_freezes\",\"type\":\"bool[]\"}],\"name\":\"multiFreeze\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_target\",\"type\":\"address\"},{\"name\":\"_timestamp\",\"type\":\"uint256\"}],\"name\":\"freezeWithTimestamp\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_targets\",\"type\":\"address[]\"},{\"name\":\"_timestamps\",\"type\":\"uint256[]\"}],\"name\":\"multiFreezeWithTimestamp\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"removeRule\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"name\":\"yottacoinAddr\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"balance\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"Freezed\",\"type\":\"event\"}]"
 
 // Eth is an auto generated Go binding around an Ethereum contract.
 type Eth struct {
@@ -172,212 +172,82 @@ func (_Eth *EthTransactorRaw) Transact(opts *bind.TransactOpts, method string, p
 	return _Eth.Contract.contract.Transact(opts, method, params...)
 }
 
-// Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
+// AllowMapping is a free data retrieval call binding the contract method 0xabfa90df.
 //
-// Solidity: function allowance(address _owner, address _spender) constant returns(uint256)
-func (_Eth *EthCaller) Allowance(opts *bind.CallOpts, _owner common.Address, _spender common.Address) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _Eth.contract.Call(opts, out, "allowance", _owner, _spender)
-	return *ret0, err
-}
-
-// Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
-//
-// Solidity: function allowance(address _owner, address _spender) constant returns(uint256)
-func (_Eth *EthSession) Allowance(_owner common.Address, _spender common.Address) (*big.Int, error) {
-	return _Eth.Contract.Allowance(&_Eth.CallOpts, _owner, _spender)
-}
-
-// Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
-//
-// Solidity: function allowance(address _owner, address _spender) constant returns(uint256)
-func (_Eth *EthCallerSession) Allowance(_owner common.Address, _spender common.Address) (*big.Int, error) {
-	return _Eth.Contract.Allowance(&_Eth.CallOpts, _owner, _spender)
-}
-
-// BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
-//
-// Solidity: function balanceOf(address _owner) constant returns(uint256)
-func (_Eth *EthCaller) BalanceOf(opts *bind.CallOpts, _owner common.Address) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _Eth.contract.Call(opts, out, "balanceOf", _owner)
-	return *ret0, err
-}
-
-// BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
-//
-// Solidity: function balanceOf(address _owner) constant returns(uint256)
-func (_Eth *EthSession) BalanceOf(_owner common.Address) (*big.Int, error) {
-	return _Eth.Contract.BalanceOf(&_Eth.CallOpts, _owner)
-}
-
-// BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
-//
-// Solidity: function balanceOf(address _owner) constant returns(uint256)
-func (_Eth *EthCallerSession) BalanceOf(_owner common.Address) (*big.Int, error) {
-	return _Eth.Contract.BalanceOf(&_Eth.CallOpts, _owner)
-}
-
-// Decimals is a free data retrieval call binding the contract method 0x313ce567.
-//
-// Solidity: function decimals() constant returns(uint8)
-func (_Eth *EthCaller) Decimals(opts *bind.CallOpts) (uint8, error) {
-	var (
-		ret0 = new(uint8)
-	)
-	out := ret0
-	err := _Eth.contract.Call(opts, out, "decimals")
-	return *ret0, err
-}
-
-// Decimals is a free data retrieval call binding the contract method 0x313ce567.
-//
-// Solidity: function decimals() constant returns(uint8)
-func (_Eth *EthSession) Decimals() (uint8, error) {
-	return _Eth.Contract.Decimals(&_Eth.CallOpts)
-}
-
-// Decimals is a free data retrieval call binding the contract method 0x313ce567.
-//
-// Solidity: function decimals() constant returns(uint8)
-func (_Eth *EthCallerSession) Decimals() (uint8, error) {
-	return _Eth.Contract.Decimals(&_Eth.CallOpts)
-}
-
-// GetFrozenAccount is a free data retrieval call binding the contract method 0xc4977807.
-//
-// Solidity: function getFrozenAccount(address _target) constant returns(bool)
-func (_Eth *EthCaller) GetFrozenAccount(opts *bind.CallOpts, _target common.Address) (bool, error) {
+// Solidity: function allowMapping() constant returns(bool)
+func (_Eth *EthCaller) AllowMapping(opts *bind.CallOpts) (bool, error) {
 	var (
 		ret0 = new(bool)
 	)
 	out := ret0
-	err := _Eth.contract.Call(opts, out, "getFrozenAccount", _target)
+	err := _Eth.contract.Call(opts, out, "allowMapping")
 	return *ret0, err
 }
 
-// GetFrozenAccount is a free data retrieval call binding the contract method 0xc4977807.
+// AllowMapping is a free data retrieval call binding the contract method 0xabfa90df.
 //
-// Solidity: function getFrozenAccount(address _target) constant returns(bool)
-func (_Eth *EthSession) GetFrozenAccount(_target common.Address) (bool, error) {
-	return _Eth.Contract.GetFrozenAccount(&_Eth.CallOpts, _target)
+// Solidity: function allowMapping() constant returns(bool)
+func (_Eth *EthSession) AllowMapping() (bool, error) {
+	return _Eth.Contract.AllowMapping(&_Eth.CallOpts)
 }
 
-// GetFrozenAccount is a free data retrieval call binding the contract method 0xc4977807.
+// AllowMapping is a free data retrieval call binding the contract method 0xabfa90df.
 //
-// Solidity: function getFrozenAccount(address _target) constant returns(bool)
-func (_Eth *EthCallerSession) GetFrozenAccount(_target common.Address) (bool, error) {
-	return _Eth.Contract.GetFrozenAccount(&_Eth.CallOpts, _target)
+// Solidity: function allowMapping() constant returns(bool)
+func (_Eth *EthCallerSession) AllowMapping() (bool, error) {
+	return _Eth.Contract.AllowMapping(&_Eth.CallOpts)
 }
 
-// GetFrozenTimestamp is a free data retrieval call binding the contract method 0xe6ad5bc7.
+// Register is a free data retrieval call binding the contract method 0x4420e486.
 //
-// Solidity: function getFrozenTimestamp(address _target) constant returns(uint256)
-func (_Eth *EthCaller) GetFrozenTimestamp(opts *bind.CallOpts, _target common.Address) (*big.Int, error) {
+// Solidity: function register(address ) constant returns(bytes)
+func (_Eth *EthCaller) Register(opts *bind.CallOpts, arg0 common.Address) ([]byte, error) {
 	var (
-		ret0 = new(*big.Int)
+		ret0 = new([]byte)
 	)
 	out := ret0
-	err := _Eth.contract.Call(opts, out, "getFrozenTimestamp", _target)
+	err := _Eth.contract.Call(opts, out, "register", arg0)
 	return *ret0, err
 }
 
-// GetFrozenTimestamp is a free data retrieval call binding the contract method 0xe6ad5bc7.
+// Register is a free data retrieval call binding the contract method 0x4420e486.
 //
-// Solidity: function getFrozenTimestamp(address _target) constant returns(uint256)
-func (_Eth *EthSession) GetFrozenTimestamp(_target common.Address) (*big.Int, error) {
-	return _Eth.Contract.GetFrozenTimestamp(&_Eth.CallOpts, _target)
+// Solidity: function register(address ) constant returns(bytes)
+func (_Eth *EthSession) Register(arg0 common.Address) ([]byte, error) {
+	return _Eth.Contract.Register(&_Eth.CallOpts, arg0)
 }
 
-// GetFrozenTimestamp is a free data retrieval call binding the contract method 0xe6ad5bc7.
+// Register is a free data retrieval call binding the contract method 0x4420e486.
 //
-// Solidity: function getFrozenTimestamp(address _target) constant returns(uint256)
-func (_Eth *EthCallerSession) GetFrozenTimestamp(_target common.Address) (*big.Int, error) {
-	return _Eth.Contract.GetFrozenTimestamp(&_Eth.CallOpts, _target)
+// Solidity: function register(address ) constant returns(bytes)
+func (_Eth *EthCallerSession) Register(arg0 common.Address) ([]byte, error) {
+	return _Eth.Contract.Register(&_Eth.CallOpts, arg0)
 }
 
-// Name is a free data retrieval call binding the contract method 0x06fdde03.
+// YottaCoin is a free data retrieval call binding the contract method 0x7c5727ca.
 //
-// Solidity: function name() constant returns(string)
-func (_Eth *EthCaller) Name(opts *bind.CallOpts) (string, error) {
+// Solidity: function yottaCoin() constant returns(address)
+func (_Eth *EthCaller) YottaCoin(opts *bind.CallOpts) (common.Address, error) {
 	var (
-		ret0 = new(string)
+		ret0 = new(common.Address)
 	)
 	out := ret0
-	err := _Eth.contract.Call(opts, out, "name")
+	err := _Eth.contract.Call(opts, out, "yottaCoin")
 	return *ret0, err
 }
 
-// Name is a free data retrieval call binding the contract method 0x06fdde03.
+// YottaCoin is a free data retrieval call binding the contract method 0x7c5727ca.
 //
-// Solidity: function name() constant returns(string)
-func (_Eth *EthSession) Name() (string, error) {
-	return _Eth.Contract.Name(&_Eth.CallOpts)
+// Solidity: function yottaCoin() constant returns(address)
+func (_Eth *EthSession) YottaCoin() (common.Address, error) {
+	return _Eth.Contract.YottaCoin(&_Eth.CallOpts)
 }
 
-// Name is a free data retrieval call binding the contract method 0x06fdde03.
+// YottaCoin is a free data retrieval call binding the contract method 0x7c5727ca.
 //
-// Solidity: function name() constant returns(string)
-func (_Eth *EthCallerSession) Name() (string, error) {
-	return _Eth.Contract.Name(&_Eth.CallOpts)
-}
-
-// Symbol is a free data retrieval call binding the contract method 0x95d89b41.
-//
-// Solidity: function symbol() constant returns(string)
-func (_Eth *EthCaller) Symbol(opts *bind.CallOpts) (string, error) {
-	var (
-		ret0 = new(string)
-	)
-	out := ret0
-	err := _Eth.contract.Call(opts, out, "symbol")
-	return *ret0, err
-}
-
-// Symbol is a free data retrieval call binding the contract method 0x95d89b41.
-//
-// Solidity: function symbol() constant returns(string)
-func (_Eth *EthSession) Symbol() (string, error) {
-	return _Eth.Contract.Symbol(&_Eth.CallOpts)
-}
-
-// Symbol is a free data retrieval call binding the contract method 0x95d89b41.
-//
-// Solidity: function symbol() constant returns(string)
-func (_Eth *EthCallerSession) Symbol() (string, error) {
-	return _Eth.Contract.Symbol(&_Eth.CallOpts)
-}
-
-// TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
-//
-// Solidity: function totalSupply() constant returns(uint256)
-func (_Eth *EthCaller) TotalSupply(opts *bind.CallOpts) (*big.Int, error) {
-	var (
-		ret0 = new(*big.Int)
-	)
-	out := ret0
-	err := _Eth.contract.Call(opts, out, "totalSupply")
-	return *ret0, err
-}
-
-// TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
-//
-// Solidity: function totalSupply() constant returns(uint256)
-func (_Eth *EthSession) TotalSupply() (*big.Int, error) {
-	return _Eth.Contract.TotalSupply(&_Eth.CallOpts)
-}
-
-// TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
-//
-// Solidity: function totalSupply() constant returns(uint256)
-func (_Eth *EthCallerSession) TotalSupply() (*big.Int, error) {
-	return _Eth.Contract.TotalSupply(&_Eth.CallOpts)
+// Solidity: function yottaCoin() constant returns(address)
+func (_Eth *EthCallerSession) YottaCoin() (common.Address, error) {
+	return _Eth.Contract.YottaCoin(&_Eth.CallOpts)
 }
 
 // AddRule is a paid mutator transaction binding the contract method 0x99f9b55e.
@@ -462,6 +332,48 @@ func (_Eth *EthSession) ChangeAdmin(newAdmin common.Address) (*types.Transaction
 // Solidity: function changeAdmin(address newAdmin) returns(bool)
 func (_Eth *EthTransactorSession) ChangeAdmin(newAdmin common.Address) (*types.Transaction, error) {
 	return _Eth.Contract.ChangeAdmin(&_Eth.TransactOpts, newAdmin)
+}
+
+// ChangeAllowMapping is a paid mutator transaction binding the contract method 0x09e2d914.
+//
+// Solidity: function changeAllowMapping(bool newAllowMapping) returns(bool)
+func (_Eth *EthTransactor) ChangeAllowMapping(opts *bind.TransactOpts, newAllowMapping bool) (*types.Transaction, error) {
+	return _Eth.contract.Transact(opts, "changeAllowMapping", newAllowMapping)
+}
+
+// ChangeAllowMapping is a paid mutator transaction binding the contract method 0x09e2d914.
+//
+// Solidity: function changeAllowMapping(bool newAllowMapping) returns(bool)
+func (_Eth *EthSession) ChangeAllowMapping(newAllowMapping bool) (*types.Transaction, error) {
+	return _Eth.Contract.ChangeAllowMapping(&_Eth.TransactOpts, newAllowMapping)
+}
+
+// ChangeAllowMapping is a paid mutator transaction binding the contract method 0x09e2d914.
+//
+// Solidity: function changeAllowMapping(bool newAllowMapping) returns(bool)
+func (_Eth *EthTransactorSession) ChangeAllowMapping(newAllowMapping bool) (*types.Transaction, error) {
+	return _Eth.Contract.ChangeAllowMapping(&_Eth.TransactOpts, newAllowMapping)
+}
+
+// ChangeThreshold is a paid mutator transaction binding the contract method 0x694e80c3.
+//
+// Solidity: function changeThreshold(uint256 newThreshold) returns(bool)
+func (_Eth *EthTransactor) ChangeThreshold(opts *bind.TransactOpts, newThreshold *big.Int) (*types.Transaction, error) {
+	return _Eth.contract.Transact(opts, "changeThreshold", newThreshold)
+}
+
+// ChangeThreshold is a paid mutator transaction binding the contract method 0x694e80c3.
+//
+// Solidity: function changeThreshold(uint256 newThreshold) returns(bool)
+func (_Eth *EthSession) ChangeThreshold(newThreshold *big.Int) (*types.Transaction, error) {
+	return _Eth.Contract.ChangeThreshold(&_Eth.TransactOpts, newThreshold)
+}
+
+// ChangeThreshold is a paid mutator transaction binding the contract method 0x694e80c3.
+//
+// Solidity: function changeThreshold(uint256 newThreshold) returns(bool)
+func (_Eth *EthTransactorSession) ChangeThreshold(newThreshold *big.Int) (*types.Transaction, error) {
+	return _Eth.Contract.ChangeThreshold(&_Eth.TransactOpts, newThreshold)
 }
 
 // Freeze is a paid mutator transaction binding the contract method 0xbf120ae5.
@@ -653,30 +565,30 @@ func (_Eth *EthTransactorSession) TransferFrom(_from common.Address, _to common.
 	return _Eth.Contract.TransferFrom(&_Eth.TransactOpts, _from, _to, _value)
 }
 
-// Transferfix is a paid mutator transaction binding the contract method 0xd54c8a56.
+// Withdraw is a paid mutator transaction binding the contract method 0x2e1a7d4d.
 //
-// Solidity: function transferfix(address _to, uint256 _value) returns()
-func (_Eth *EthTransactor) Transferfix(opts *bind.TransactOpts, _to common.Address, _value *big.Int) (*types.Transaction, error) {
-	return _Eth.contract.Transact(opts, "transferfix", _to, _value)
+// Solidity: function withdraw(uint256 _amount) returns(bool)
+func (_Eth *EthTransactor) Withdraw(opts *bind.TransactOpts, _amount *big.Int) (*types.Transaction, error) {
+	return _Eth.contract.Transact(opts, "withdraw", _amount)
 }
 
-// Transferfix is a paid mutator transaction binding the contract method 0xd54c8a56.
+// Withdraw is a paid mutator transaction binding the contract method 0x2e1a7d4d.
 //
-// Solidity: function transferfix(address _to, uint256 _value) returns()
-func (_Eth *EthSession) Transferfix(_to common.Address, _value *big.Int) (*types.Transaction, error) {
-	return _Eth.Contract.Transferfix(&_Eth.TransactOpts, _to, _value)
+// Solidity: function withdraw(uint256 _amount) returns(bool)
+func (_Eth *EthSession) Withdraw(_amount *big.Int) (*types.Transaction, error) {
+	return _Eth.Contract.Withdraw(&_Eth.TransactOpts, _amount)
 }
 
-// Transferfix is a paid mutator transaction binding the contract method 0xd54c8a56.
+// Withdraw is a paid mutator transaction binding the contract method 0x2e1a7d4d.
 //
-// Solidity: function transferfix(address _to, uint256 _value) returns()
-func (_Eth *EthTransactorSession) Transferfix(_to common.Address, _value *big.Int) (*types.Transaction, error) {
-	return _Eth.Contract.Transferfix(&_Eth.TransactOpts, _to, _value)
+// Solidity: function withdraw(uint256 _amount) returns(bool)
+func (_Eth *EthTransactorSession) Withdraw(_amount *big.Int) (*types.Transaction, error) {
+	return _Eth.Contract.Withdraw(&_Eth.TransactOpts, _amount)
 }
 
-// EthApprovalIterator is returned from FilterApproval and is used to iterate over the raw logs and unpacked data for Approval events raised by the Eth contract.
-type EthApprovalIterator struct {
-	Event *EthApproval // Event containing the contract specifics and raw log
+// EthFreezedIterator is returned from FilterFreezed and is used to iterate over the raw logs and unpacked data for Freezed events raised by the Eth contract.
+type EthFreezedIterator struct {
+	Event *EthFreezed // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -690,7 +602,7 @@ type EthApprovalIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *EthApprovalIterator) Next() bool {
+func (it *EthFreezedIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -699,7 +611,7 @@ func (it *EthApprovalIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(EthApproval)
+			it.Event = new(EthFreezed)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -714,7 +626,7 @@ func (it *EthApprovalIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(EthApproval)
+		it.Event = new(EthFreezed)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -730,61 +642,43 @@ func (it *EthApprovalIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *EthApprovalIterator) Error() error {
+func (it *EthFreezedIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *EthApprovalIterator) Close() error {
+func (it *EthFreezedIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// EthApproval represents a Approval event raised by the Eth contract.
-type EthApproval struct {
-	Owner   common.Address
-	Spender common.Address
-	Value   *big.Int
+// EthFreezed represents a Freezed event raised by the Eth contract.
+type EthFreezed struct {
+	Sender  common.Address
+	Balance *big.Int
+	Data    []byte
 	Raw     types.Log // Blockchain specific contextual infos
 }
 
-// FilterApproval is a free log retrieval operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
+// FilterFreezed is a free log retrieval operation binding the contract event 0x0774af36e8d3fbb76be8b6b764c3e3372138e0b332167b99da8bb7236cd1b3f3.
 //
-// Solidity: event Approval(address indexed owner, address indexed spender, uint256 value)
-func (_Eth *EthFilterer) FilterApproval(opts *bind.FilterOpts, owner []common.Address, spender []common.Address) (*EthApprovalIterator, error) {
+// Solidity: event Freezed(address sender, uint256 balance, bytes data)
+func (_Eth *EthFilterer) FilterFreezed(opts *bind.FilterOpts) (*EthFreezedIterator, error) {
 
-	var ownerRule []interface{}
-	for _, ownerItem := range owner {
-		ownerRule = append(ownerRule, ownerItem)
-	}
-	var spenderRule []interface{}
-	for _, spenderItem := range spender {
-		spenderRule = append(spenderRule, spenderItem)
-	}
-
-	logs, sub, err := _Eth.contract.FilterLogs(opts, "Approval", ownerRule, spenderRule)
+	logs, sub, err := _Eth.contract.FilterLogs(opts, "Freezed")
 	if err != nil {
 		return nil, err
 	}
-	return &EthApprovalIterator{contract: _Eth.contract, event: "Approval", logs: logs, sub: sub}, nil
+	return &EthFreezedIterator{contract: _Eth.contract, event: "Freezed", logs: logs, sub: sub}, nil
 }
 
-// WatchApproval is a free log subscription operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
+// WatchFreezed is a free log subscription operation binding the contract event 0x0774af36e8d3fbb76be8b6b764c3e3372138e0b332167b99da8bb7236cd1b3f3.
 //
-// Solidity: event Approval(address indexed owner, address indexed spender, uint256 value)
-func (_Eth *EthFilterer) WatchApproval(opts *bind.WatchOpts, sink chan<- *EthApproval, owner []common.Address, spender []common.Address) (event.Subscription, error) {
+// Solidity: event Freezed(address sender, uint256 balance, bytes data)
+func (_Eth *EthFilterer) WatchFreezed(opts *bind.WatchOpts, sink chan<- *EthFreezed) (event.Subscription, error) {
 
-	var ownerRule []interface{}
-	for _, ownerItem := range owner {
-		ownerRule = append(ownerRule, ownerItem)
-	}
-	var spenderRule []interface{}
-	for _, spenderItem := range spender {
-		spenderRule = append(spenderRule, spenderItem)
-	}
-
-	logs, sub, err := _Eth.contract.WatchLogs(opts, "Approval", ownerRule, spenderRule)
+	logs, sub, err := _Eth.contract.WatchLogs(opts, "Freezed")
 	if err != nil {
 		return nil, err
 	}
@@ -794,8 +688,8 @@ func (_Eth *EthFilterer) WatchApproval(opts *bind.WatchOpts, sink chan<- *EthApp
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(EthApproval)
-				if err := _Eth.contract.UnpackLog(event, "Approval", log); err != nil {
+				event := new(EthFreezed)
+				if err := _Eth.contract.UnpackLog(event, "Freezed", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -816,165 +710,12 @@ func (_Eth *EthFilterer) WatchApproval(opts *bind.WatchOpts, sink chan<- *EthApp
 	}), nil
 }
 
-// ParseApproval is a log parse operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
+// ParseFreezed is a log parse operation binding the contract event 0x0774af36e8d3fbb76be8b6b764c3e3372138e0b332167b99da8bb7236cd1b3f3.
 //
-// Solidity: event Approval(address indexed owner, address indexed spender, uint256 value)
-func (_Eth *EthFilterer) ParseApproval(log types.Log) (*EthApproval, error) {
-	event := new(EthApproval)
-	if err := _Eth.contract.UnpackLog(event, "Approval", log); err != nil {
-		return nil, err
-	}
-	return event, nil
-}
-
-// EthTransferIterator is returned from FilterTransfer and is used to iterate over the raw logs and unpacked data for Transfer events raised by the Eth contract.
-type EthTransferIterator struct {
-	Event *EthTransfer // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *EthTransferIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(EthTransfer)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(EthTransfer)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *EthTransferIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *EthTransferIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// EthTransfer represents a Transfer event raised by the Eth contract.
-type EthTransfer struct {
-	From  common.Address
-	To    common.Address
-	Value *big.Int
-	Raw   types.Log // Blockchain specific contextual infos
-}
-
-// FilterTransfer is a free log retrieval operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
-//
-// Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
-func (_Eth *EthFilterer) FilterTransfer(opts *bind.FilterOpts, from []common.Address, to []common.Address) (*EthTransferIterator, error) {
-
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
-	}
-	var toRule []interface{}
-	for _, toItem := range to {
-		toRule = append(toRule, toItem)
-	}
-
-	logs, sub, err := _Eth.contract.FilterLogs(opts, "Transfer", fromRule, toRule)
-	if err != nil {
-		return nil, err
-	}
-	return &EthTransferIterator{contract: _Eth.contract, event: "Transfer", logs: logs, sub: sub}, nil
-}
-
-// WatchTransfer is a free log subscription operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
-//
-// Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
-func (_Eth *EthFilterer) WatchTransfer(opts *bind.WatchOpts, sink chan<- *EthTransfer, from []common.Address, to []common.Address) (event.Subscription, error) {
-
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
-	}
-	var toRule []interface{}
-	for _, toItem := range to {
-		toRule = append(toRule, toItem)
-	}
-
-	logs, sub, err := _Eth.contract.WatchLogs(opts, "Transfer", fromRule, toRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(EthTransfer)
-				if err := _Eth.contract.UnpackLog(event, "Transfer", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseTransfer is a log parse operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
-//
-// Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
-func (_Eth *EthFilterer) ParseTransfer(log types.Log) (*EthTransfer, error) {
-	event := new(EthTransfer)
-	if err := _Eth.contract.UnpackLog(event, "Transfer", log); err != nil {
+// Solidity: event Freezed(address sender, uint256 balance, bytes data)
+func (_Eth *EthFilterer) ParseFreezed(log types.Log) (*EthFreezed, error) {
+	event := new(EthFreezed)
+	if err := _Eth.contract.UnpackLog(event, "Freezed", log); err != nil {
 		return nil, err
 	}
 	return event, nil
