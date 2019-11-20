@@ -15,7 +15,7 @@ type Dai struct {
 
 //New create new Dao instance
 func New(ip string, port int, username, password, dbname string) *Dai {
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@%s:%d/%s", username, password, ip, port, dbname))
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8", username, password, ip, port, dbname))
 	checkErr(err)
 	return &Dai{db: db}
 }
@@ -48,7 +48,7 @@ func (dai *Dai) FetchNewData(from, to int) []*Mapping {
 //GetBkRange get range of blocks
 func (dai *Dai) GetBkRange() *BkRange {
 	var id, from, to int
-	err := dai.db.QueryRow("select id,from,to from bkrange where id=?", 1).Scan(&id, &from, &to)
+	err := dai.db.QueryRow("select `id`,`from`,`to` from bkrange where id=?", 1).Scan(&id, &from, &to)
 	checkErr(err)
 	return NewBkRange(id, from, to)
 }
