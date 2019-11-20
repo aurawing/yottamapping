@@ -1,4 +1,4 @@
-package yottamapping
+package dai
 
 import (
 	"encoding/binary"

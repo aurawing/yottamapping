@@ -40,7 +40,9 @@ func (dai *Dai) FetchNewData(from, to int) []*Mapping {
 		var nodeAccount string
 		err := rows.Scan(&transactionHash, &blockNumber, &ethAddress, &balance, &param, &isVote, &nodeAccount)
 		checkErr(err)
-		mappings = append(mappings, NewMapping(transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, 0))
+		ytaAccount, err := EthAddrToName(ethAddress)
+		checkErr(err)
+		mappings = append(mappings, NewMapping(transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, 0, ytaAccount))
 	}
 	return mappings
 }
@@ -57,7 +59,7 @@ func (dai *Dai) GetBkRange() *BkRange {
 func (dai *Dai) UpdateLocalData(mappings []*Mapping, v Verifier, from, to int) error {
 	tx, err := dai.db.Begin()
 	checkErr(err)
-	stmt, err := tx.Prepare("insert into mapping (transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+	stmt, err := tx.Prepare("insert into mapping (transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, status, ytaAccount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		tx.Rollback()
 		checkErr(err)
@@ -66,7 +68,7 @@ func (dai *Dai) UpdateLocalData(mappings []*Mapping, v Verifier, from, to int) e
 		if v(m) {
 			m.Status = 1
 		}
-		_, err = stmt.Exec(m.TransactionHash, m.BlockNumber, m.EthAddress, m.Balance, m.Param, m.IsVote, m.NodeAccount, m.Status)
+		_, err = stmt.Exec(m.TransactionHash, m.BlockNumber, m.EthAddress, m.Balance, m.Param, m.IsVote, m.NodeAccount, m.Status, m.YtaAccount)
 		if err != nil {
 			tx.Rollback()
 			checkErr(err)

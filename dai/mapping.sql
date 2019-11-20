@@ -7,6 +7,7 @@ CREATE TABLE `mapping` (
   `isVote` tinyint(10) NOT NULL DEFAULT '0',
   `nodeAccount` varchar(12) DEFAULT NULL,
   `status` int(10) NOT NULL DEFAULT '0',
+  `ytaAccount` varchar(13) DEFAULT NULL,
   PRIMARY KEY (`transactionHash`),
   KEY `BLOCKNUM_INDEX` (`blockNumber` DESC)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

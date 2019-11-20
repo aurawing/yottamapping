@@ -65,7 +65,11 @@ func (cli *Cli) GetFreezedLogs(from, to int) (map[string]*dai.Mapping, error) {
 			if err != nil {
 				log.Fatalf("error when decode freezed event ABI: %s\n", err.Error())
 			}
-			m := dai.NewMapping(vLog.TxHash.Hex(), int(vLog.BlockNumber), freezedEvent.Sender.Hex(), freezedEvent.Balance.String(), string(freezedEvent.Data), 0, "", 0)
+			ytaAccount, err := dai.EthAddrToName(freezedEvent.Sender.Hex())
+			if err != nil {
+				log.Fatalf("error when generate YTA account from ethereum address: %s\n", err.Error())
+			}
+			m := dai.NewMapping(vLog.TxHash.Hex(), int(vLog.BlockNumber), freezedEvent.Sender.Hex(), freezedEvent.Balance.String(), string(freezedEvent.Data), 0, "", 0, ytaAccount)
 			mappings[m.TransactionHash] = m
 		}
 	}
