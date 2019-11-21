@@ -8,7 +8,7 @@ import (
 var cli *Cli
 
 func TestMain(m *testing.M) {
-	cli = NewClient("https://ropsten.infura.io", "0x56E5B0BDaea3c33a8EC723E2E038453E84C14bA7")
+	cli = NewClient("https://ropsten.infura.io", "0x103b8c9e072193F2D0E3B77cEfb6d5DC9294d0d2", "0x56E5B0BDaea3c33a8EC723E2E038453E84C14bA7")
 	os.Exit(m.Run())
 }
 

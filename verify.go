@@ -1,6 +1,7 @@
 package yottamapping
 
 import (
+	"encoding/json"
 	"log"
 
 	dai "github.com/aurawing/yottamapping/dai"
@@ -29,6 +30,18 @@ func (mapper *Mapper) Verify(mappings map[string]*dai.Mapping) dai.Verifier {
 		if m.Param != mv.Param {
 			log.Printf("param in DB is not equal to event: %s %s %s\n", m.TransactionHash, m.Param, mv.Param)
 			return false
+		}
+		ruleMap := mapper.to.EtherscanCli.MappingRuleID(m.EthAddress, m.BlockNumber)
+		if len(ruleMap) > 0 {
+			ruleMapJSON, err := json.Marshal(ruleMap)
+			if err != nil {
+				log.Fatalf("error when marshal rule map to json: %s\n", err.Error())
+			}
+			m.BlockRule = string(ruleMapJSON)
+		}
+		timestamp := mapper.ethcli.GetFrozenTime(m.EthAddress)
+		if timestamp > 1574319600 {
+			m.FronzenTime = timestamp
 		}
 		return true
 	}

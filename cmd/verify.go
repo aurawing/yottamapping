@@ -39,7 +39,8 @@ to quickly create a Cobra application.`,
 
 var apiURL string
 var ethURL string
-var contractAddr string
+var ytaContractAddr string
+var mapContractAddr string
 var fromIP string
 var fromPort int
 var fromUsername string
@@ -56,7 +57,8 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	verifyCmd.Flags().StringVarP(&apiURL, "api-url", "a", "http://api-cn.etherscan.com/api", "etherscan API URL")
 	verifyCmd.Flags().StringVarP(&ethURL, "eth-url", "e", "https://ropsten.infura.io", "ethereum connection URL")
-	verifyCmd.Flags().StringVarP(&contractAddr, "contract-addr", "c", "0x56E5B0BDaea3c33a8EC723E2E038453E84C14bA7", "contract address of yottamapping contract")
+	verifyCmd.Flags().StringVarP(&ytaContractAddr, "yta-contract-addr", "y", "0x56E5B0BDaea3c33a8EC723E2E038453E84C14bA7", "contract address of yottamapping contract")
+	verifyCmd.Flags().StringVarP(&mapContractAddr, "map-contract-addr", "m", "0x103b8c9e072193F2D0E3B77cEfb6d5DC9294d0d2", "contract address of yottacoin contract")
 	verifyCmd.Flags().StringVarP(&fromIP, "from-ip", "i", "127.0.0.1", "IP address of source database")
 	verifyCmd.Flags().IntVarP(&fromPort, "from-port", "p", 3306, "port number of source database")
 	verifyCmd.Flags().StringVarP(&fromUsername, "from-username", "u", "root", "username of source database")
@@ -68,7 +70,7 @@ func init() {
 	verifyCmd.Flags().StringVarP(&toPassword, "to-password", "x", "", "password of destination database")
 	verifyCmd.Flags().StringVarP(&toDbname, "to-dbname", "o", "yottamapping", "name of destination database")
 
-	mapper := ym.NewMapper(ethURL, contractAddr, fromIP, fromPort, fromUsername, fromPassword, fromDbname, toIP, toPort, toUsername, toPassword, toDbname)
+	mapper := ym.NewMapper(apiURL, ethURL, contractAddr, fromIP, fromPort, fromUsername, fromPassword, fromDbname, toIP, toPort, toUsername, toPassword, toDbname)
 	mapper.PullData()
 
 	// Cobra supports Persistent Flags which will work for this command

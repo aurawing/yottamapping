@@ -15,11 +15,11 @@ type Mapper struct {
 }
 
 //NewMapper create a new mapper structure
-func NewMapper(apiURL, ethURL, contractAddr, fromIP string, fromPort int, fromUsername, fromPassword, fromDbname, toIP string, toPort int, toUsername, toPassword, toDbname string) *Mapper {
+func NewMapper(apiURL, ethURL, ytaContractAddr, mapContractAddr, fromIP string, fromPort int, fromUsername, fromPassword, fromDbname, toIP string, toPort int, toUsername, toPassword, toDbname string) *Mapper {
 	return &Mapper{
-		ethcli: ethc.NewClient(ethURL, contractAddr),
-		from:   dai.New(fromIP, fromPort, fromUsername, fromPassword, fromDbname, apiURL, contractAddr),
-		to:     dai.New(toIP, toPort, toUsername, toPassword, toDbname, apiURL, contractAddr),
+		ethcli: ethc.NewClient(ethURL, ytaContractAddr, mapContractAddr),
+		from:   dai.New(fromIP, fromPort, fromUsername, fromPassword, fromDbname, apiURL, mapContractAddr),
+		to:     dai.New(toIP, toPort, toUsername, toPassword, toDbname, apiURL, mapContractAddr),
 	}
 }
 

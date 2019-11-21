@@ -9,6 +9,7 @@ CREATE TABLE `mapping` (
   `status` int(10) NOT NULL DEFAULT '0',
   `ytaAccount` varchar(13) DEFAULT NULL,
   `blockRule`  varchar(1000) DEFAULT NULL,
+  `fronzenTime` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`transactionHash`),
   KEY `BLOCKNUM_INDEX` (`blockNumber` DESC)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

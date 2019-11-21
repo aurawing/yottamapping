@@ -2,7 +2,6 @@ package dai
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"log"
 
@@ -13,14 +12,14 @@ import (
 //Dai data access interface
 type Dai struct {
 	db           *sql.DB
-	etherscanCli *etherscan.Cli
+	EtherscanCli *etherscan.Cli
 }
 
 //New create new Dao instance
 func New(ip string, port int, username, password, dbname, apiURL, contractAddr string) *Dai {
 	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8", username, password, ip, port, dbname))
 	checkErr(err)
-	return &Dai{db: db, etherscanCli: etherscan.NewCli(apiURL, contractAddr)}
+	return &Dai{db: db, EtherscanCli: etherscan.NewCli(apiURL, contractAddr)}
 }
 
 //Close close driver
@@ -45,7 +44,7 @@ func (dai *Dai) FetchNewData(from, to int) []*Mapping {
 		checkErr(err)
 		ytaAccount, err := EthAddrToName(ethAddress)
 		checkErr(err)
-		mappings = append(mappings, NewMapping(transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, 0, ytaAccount, ""))
+		mappings = append(mappings, NewMapping(transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, 0, ytaAccount, "", 0))
 	}
 	return mappings
 }
@@ -62,7 +61,7 @@ func (dai *Dai) GetBkRange() *BkRange {
 func (dai *Dai) UpdateLocalData(mappings []*Mapping, v Verifier, from, to int) error {
 	tx, err := dai.db.Begin()
 	checkErr(err)
-	stmt, err := tx.Prepare("insert into mapping (transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, status, ytaAccount, blockRule) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	stmt, err := tx.Prepare("insert into mapping (transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, status, ytaAccount, blockRule, fronzenTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		tx.Rollback()
 		checkErr(err)
@@ -71,12 +70,7 @@ func (dai *Dai) UpdateLocalData(mappings []*Mapping, v Verifier, from, to int) e
 		if v(m) {
 			m.Status = 1
 		}
-		ruleMap := dai.etherscanCli.MappingRuleID(m.EthAddress, m.BlockNumber)
-		ruleMapJSON, err := json.Marshal(ruleMap)
-		if err != nil {
-			log.Fatalf("error when marshal rule map to json: %s\n", err.Error())
-		}
-		_, err = stmt.Exec(m.TransactionHash, m.BlockNumber, m.EthAddress, m.Balance, m.Param, m.IsVote, m.NodeAccount, m.Status, m.YtaAccount, string(ruleMapJSON))
+		_, err = stmt.Exec(m.TransactionHash, m.BlockNumber, m.EthAddress, m.Balance, m.Param, m.IsVote, m.NodeAccount, m.Status, m.YtaAccount, m.BlockRule, m.FronzenTime)
 		if err != nil {
 			tx.Rollback()
 			checkErr(err)
