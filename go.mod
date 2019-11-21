@@ -17,11 +17,13 @@ require (
 	github.com/huin/goupnp v1.0.0 // indirect
 	github.com/jackpal/go-nat-pmp v1.0.2 // indirect
 	github.com/karalabe/usb v0.0.0-20191104083709-911d15fe12a9 // indirect
+	github.com/mitchellh/go-homedir v1.1.0
 	github.com/olekukonko/tablewriter v0.0.2 // indirect
 	github.com/pborman/uuid v1.2.0 // indirect
 	github.com/prometheus/tsdb v0.10.0 // indirect
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/spf13/cobra v0.0.5
+	github.com/spf13/viper v1.3.2
 	github.com/status-im/keycard-go v0.0.0-20191119095144-8515e729d7a0 // indirect
 	github.com/steakknife/bloomfilter v0.0.0-20180922174646-6819c0d2a570 // indirect
 	github.com/steakknife/hamming v0.0.0-20180906055917-c99c65617cd3 // indirect

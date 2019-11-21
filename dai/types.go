@@ -18,9 +18,8 @@ type Mapping struct {
 
 //BkRange structure
 type BkRange struct {
-	ID   int
-	From int
-	To   int
+	ID  int
+	End int
 }
 
 //NewMapping create a new mapping structure
@@ -39,10 +38,9 @@ func NewMapping(transactionHash string, blockNumber int, ethAddress, balance, pa
 }
 
 //NewBkRange create a new BkRange structure
-func NewBkRange(id, from, to int) *BkRange {
+func NewBkRange(id, end int) *BkRange {
 	return &BkRange{
-		ID:   id,
-		From: from,
-		To:   to,
+		ID:  id,
+		End: end,
 	}
 }

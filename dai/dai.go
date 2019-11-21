@@ -49,10 +49,10 @@ func (dai *Dai) FetchNewData(from, to int) []*Mapping {
 
 //GetBkRange get range of blocks
 func (dai *Dai) GetBkRange() *BkRange {
-	var id, from, to int
-	err := dai.db.QueryRow("select `id`,`from`,`to` from bkrange where id=?", 1).Scan(&id, &from, &to)
+	var id, end int
+	err := dai.db.QueryRow("select `id`,`end` from bkrange where id=?", 1).Scan(&id, &end)
 	checkErr(err)
-	return NewBkRange(id, from, to)
+	return NewBkRange(id, end)
 }
 
 //UpdateLocalData update local database of mapping

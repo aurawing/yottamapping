@@ -27,18 +27,20 @@ func NewMapper(ethURL, contractAddr, fromIP string, fromPort int, fromUsername, 
 func (mapper *Mapper) PullData() {
 	fromBkRange := mapper.from.GetBkRange()
 	toBkRange := mapper.to.GetBkRange()
-	if fromBkRange.To <= toBkRange.To {
-		log.Fatalf("no new data for fetching, latest block number: %d\n", toBkRange.To)
+	if fromBkRange.End <= toBkRange.End {
+		log.Fatalf("no new data for fetching, latest block number: %d\n", toBkRange.End)
 	}
-	log.Printf("1. fetching events from block %d to %d...\n", toBkRange.To+1, fromBkRange.To)
-	dbMappings := mapper.from.FetchNewData(toBkRange.To+1, fromBkRange.To)
-	log.Printf("fetched %d events\n", len(dbMappings))
-	log.Printf("fetching events on ethereum mainnet...\n")
-	bkMappings, err := mapper.ethcli.GetFreezedLogs(toBkRange.To+1, fromBkRange.To)
+	log.Printf("fetching data of source database from block %d to %d...\n", toBkRange.End+1, fromBkRange.End)
+	dbMappings := mapper.from.FetchNewData(toBkRange.End+1, fromBkRange.End)
+	log.Printf("fetched %d records in source database\n", len(dbMappings))
+	log.Printf("fetching events on ethereum network...\n")
+	bkMappings, err := mapper.ethcli.GetFreezedLogs(toBkRange.End+1, fromBkRange.End)
 	if err != nil {
 		log.Fatalf("get freezed logs failed: %s\n", err.Error())
 	}
-	err = mapper.to.UpdateLocalData(dbMappings, mapper.Verify(bkMappings), toBkRange.To+1, fromBkRange.To)
+	log.Printf("fetched %d events on ethereum network\n", len(bkMappings))
+	log.Printf("verifying and updating local database...\n")
+	err = mapper.to.UpdateLocalData(dbMappings, mapper.Verify(bkMappings), toBkRange.End+1, fromBkRange.End)
 	if err != nil {
 		log.Fatalf("please check local database, error happens when commit: %s\n", err.Error())
 	}

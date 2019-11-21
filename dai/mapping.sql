@@ -14,8 +14,7 @@ CREATE TABLE `mapping` (
 
 CREATE TABLE `test`.`bkrange` (
   `id` INT NOT NULL DEFAULT 1,
-  `from` INT NOT NULL DEFAULT 0,
-  `to` INT NOT NULL DEFAULT 0,
+  `end` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 );
 
