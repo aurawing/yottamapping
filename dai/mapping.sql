@@ -8,6 +8,7 @@ CREATE TABLE `mapping` (
   `nodeAccount` varchar(12) DEFAULT NULL,
   `status` int(10) NOT NULL DEFAULT '0',
   `ytaAccount` varchar(13) DEFAULT NULL,
+  `blockRule`  varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`transactionHash`),
   KEY `BLOCKNUM_INDEX` (`blockNumber` DESC)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -18,4 +19,4 @@ CREATE TABLE `test`.`bkrange` (
   PRIMARY KEY (`id`)
 );
 
-INSERT INTO `test`.`bkrange` (`id`, `from`, `to`) VALUES ('1', '6800000', '6800000');
+INSERT INTO `test`.`bkrange` (`id`, `end`) VALUES ('1', '6800000');

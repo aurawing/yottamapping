@@ -37,6 +37,7 @@ to quickly create a Cobra application.`,
 	},
 }
 
+var apiURL string
 var ethURL string
 var contractAddr string
 var fromIP string
@@ -53,6 +54,7 @@ var toDbname string
 func init() {
 	rootCmd.AddCommand(verifyCmd)
 	// Here you will define your flags and configuration settings.
+	verifyCmd.Flags().StringVarP(&apiURL, "api-url", "a", "http://api-cn.etherscan.com/api", "etherscan API URL")
 	verifyCmd.Flags().StringVarP(&ethURL, "eth-url", "e", "https://ropsten.infura.io", "ethereum connection URL")
 	verifyCmd.Flags().StringVarP(&contractAddr, "contract-addr", "c", "0x56E5B0BDaea3c33a8EC723E2E038453E84C14bA7", "contract address of yottamapping contract")
 	verifyCmd.Flags().StringVarP(&fromIP, "from-ip", "i", "127.0.0.1", "IP address of source database")

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/aurawing/yottamapping/dai"
+	"github.com/aurawing/yottamapping/eth/ytm"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
@@ -53,7 +54,7 @@ func (cli *Cli) GetFreezedLogs(from, to int) (map[string]*dai.Mapping, error) {
 	if err != nil {
 		log.Fatalf("error when filter logs: %s\n", err.Error())
 	}
-	contractAbi, err := abi.JSON(strings.NewReader(string(EthABI)))
+	contractAbi, err := abi.JSON(strings.NewReader(string(ytm.YtmABI)))
 	if err != nil {
 		log.Fatalf("error when decode YottaCoin ABI: %s\n", err.Error())
 	}

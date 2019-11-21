@@ -14,6 +14,7 @@ type Mapping struct {
 	NodeAccount     string
 	Status          int
 	YtaAccount      string
+	BlockRule       string
 }
 
 //BkRange structure
@@ -23,7 +24,7 @@ type BkRange struct {
 }
 
 //NewMapping create a new mapping structure
-func NewMapping(transactionHash string, blockNumber int, ethAddress, balance, param string, isVote int, nodeAccount string, status int, ytaAccount string) *Mapping {
+func NewMapping(transactionHash string, blockNumber int, ethAddress, balance, param string, isVote int, nodeAccount string, status int, ytaAccount, blockRule string) *Mapping {
 	return &Mapping{
 		TransactionHash: transactionHash,
 		BlockNumber:     blockNumber,
@@ -34,6 +35,7 @@ func NewMapping(transactionHash string, blockNumber int, ethAddress, balance, pa
 		NodeAccount:     nodeAccount,
 		Status:          status,
 		YtaAccount:      ytaAccount,
+		BlockRule:       blockRule,
 	}
 }
 

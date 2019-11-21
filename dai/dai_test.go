@@ -14,8 +14,5 @@ func TestMain(m *testing.M) {
 
 func TestGetBkRange(t *testing.T) {
 	r := d.GetBkRange()
-	if r.From != 6900000 {
-		t.Error("Generate public key by private key failed.")
-	}
-	t.Logf("Get block range: %d %d\n", r.From, r.To)
+	t.Logf("Get block range: %d\n", r.End)
 }
