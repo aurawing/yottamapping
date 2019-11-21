@@ -52,9 +52,9 @@ func (cli *Cli) GetTxList(addr string, blockNumber int) []*Tx {
 }
 
 //MappingRuleID transform all rule address of one address to rule ID
-func (cli *Cli) MappingRuleID(addr string, blockNumber int) map[int]uint64 {
+func (cli *Cli) MappingRuleID(addr string, blockNumber int) map[int]int64 {
 	addr = strings.ToLower(addr)
-	result := make(map[int]uint64)
+	result := make(map[int]int64)
 	transactions := cli.GetTxList(addr, blockNumber)
 	for _, tx := range transactions {
 		if tx.To == addr && RuleMap[tx.From] > 0 {
@@ -64,7 +64,7 @@ func (cli *Cli) MappingRuleID(addr string, blockNumber int) map[int]uint64 {
 			} else {
 				v = tx.Value[0 : len(tx.Value)-14]
 			}
-			amount, err := strconv.ParseUint(v, 10, 64)
+			amount, err := strconv.ParseInt(v, 10, 64)
 			if err != nil {
 				log.Fatalf("error when convert block amount string to uint64: %s\n", err.Error())
 			}
