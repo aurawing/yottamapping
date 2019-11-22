@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 )
@@ -24,6 +25,9 @@ func NewCli(apiURL, contractAddr string) *Cli {
 
 //GetTxList fetch all transactions of certain address
 func (cli *Cli) GetTxList(addr string, blockNumber int) []*Tx {
+	cli.client.Transport = &http.Transport{Proxy: func(_ *http.Request) (*url.URL, error) {
+		return url.Parse("http://127.0.0.1:10801")
+	}}
 	url := fmt.Sprintf("%s?module=account&action=tokentx&contractaddress=%s&address=%s&startblock=6425985&endblock=%d&sort=asc&apikey=X53VEQC87MSYAS9XY436V8QZW7MPM8UEIG", cli.apiURL, cli.contractAddr, addr, blockNumber)
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -66,7 +70,7 @@ func (cli *Cli) MappingRuleID(addr string, blockNumber int) map[int]int64 {
 			}
 			amount, err := strconv.ParseInt(v, 10, 64)
 			if err != nil {
-				log.Fatalf("error when convert block amount string to uint64: %s\n", err.Error())
+				log.Fatalf("error when convert block amount string to int64: %s\n", err.Error())
 			}
 			result[RuleMap[tx.From]] += amount
 		}

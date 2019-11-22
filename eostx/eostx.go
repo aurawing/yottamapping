@@ -41,7 +41,7 @@ func NewInstance(url, adminAccount, adminPK, lockAccount, lockPK, operatorAccoun
 }
 
 //CreateAccountTx create a new account and add block rules
-func (eostx *EosTX) CreateAccountTx(userAccount, userPubkey string, balance int64, frozenTime uint64, needVote bool, blockMap map[int]int64) (string, error) {
+func (eostx *EosTX) CreateAccountTx(userAccount, userPubkey string, balance int64, frozenTime int64, needVote bool, blockMap map[int]int64) (string, error) {
 	eostx.API.SetCustomGetRequiredKeys(func(tx *eos.Transaction) ([]ecc.PublicKey, error) {
 		publickey1, err := ytcrypto.GetPublicKeyByPrivateKey(eostx.adminPK)
 		pubkey1, err := ecc.NewPublicKey(fmt.Sprintf("%s%s", "EOS", publickey1))
@@ -90,7 +90,7 @@ func (eostx *EosTX) CreateAccountTx(userAccount, userPubkey string, balance int6
 			Authorization: []eos.PermissionLevel{
 				{Actor: eos.AN(eostx.operatorAccount), Permission: eos.PN("active")},
 			},
-			ActionData: eos.NewActionData(LockTransfer{LockRuleID: uint64(id), From: eos.AN(eostx.operatorAccount), To: eos.AN(userAccount), Quantity: NewYTAAsset(bal), Amount: NewYTAAsset(0), Memo: "add lock record"}),
+			ActionData: eos.NewActionData(LockTransfer{LockRuleID: int64(id), From: eos.AN(eostx.operatorAccount), To: eos.AN(userAccount), Quantity: NewYTAAsset(bal), Amount: NewYTAAsset(0), Memo: "add lock record"}),
 		}
 		action2s = append(action2s, blockAction)
 	}
@@ -120,7 +120,7 @@ func (eostx *EosTX) CreateAccountTx(userAccount, userPubkey string, balance int6
 }
 
 //VoteTx do voting
-func (eostx *EosTX) VoteTx(userAccount, userPubkey string, balance int64, frozenTime uint64, voteAccount string, blockMap map[int]int64) (string, error) {
+func (eostx *EosTX) VoteTx(userAccount, userPubkey string, balance int64, frozenTime int64, voteAccount string, blockMap map[int]int64) (string, error) {
 	eostx.API.SetCustomGetRequiredKeys(func(tx *eos.Transaction) ([]ecc.PublicKey, error) {
 		publickey1, err := ytcrypto.GetPublicKeyByPrivateKey(eostx.lockPK)
 		pubkey1, err := ecc.NewPublicKey(fmt.Sprintf("%s%s", "EOS", publickey1))

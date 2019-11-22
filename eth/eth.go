@@ -43,7 +43,7 @@ func NewClient(url, ytaContractAddr, mapContractAddr string) *Cli {
 }
 
 //GetFrozenTime get frozen timestamp of one address
-func (cli *Cli) GetFrozenTime(addr string) uint64 {
+func (cli *Cli) GetFrozenTime(addr string) int64 {
 	address := common.HexToAddress(addr)
 	instance, err := ytc.NewYtc(address, cli.client)
 	if err != nil {
@@ -53,7 +53,7 @@ func (cli *Cli) GetFrozenTime(addr string) uint64 {
 	if err != nil {
 		log.Fatalf("error when get frozen timestamp of address %s: %s\n", addr, err.Error())
 	}
-	return timestamp.Uint64()
+	return timestamp.Int64()
 }
 
 //GetFreezedLogs fetch all freezed logs
@@ -75,8 +75,8 @@ func (cli *Cli) GetFreezedLogs(from, to int) (map[string]*dai.Mapping, error) {
 		log.Fatalf("error when decode YottaCoin ABI: %s\n", err.Error())
 	}
 	for _, vLog := range logs {
-		switch vLog.Topics[0].Hex() {
-		case cli.eventType.Hex():
+		switch strings.ToLower(vLog.Topics[0].Hex()) {
+		case strings.ToLower(cli.eventType.Hex()):
 			var freezedEvent FreezedLog
 			err := contractAbi.Unpack(&freezedEvent, "Freezed", vLog.Data)
 			if err != nil {
@@ -86,7 +86,7 @@ func (cli *Cli) GetFreezedLogs(from, to int) (map[string]*dai.Mapping, error) {
 			if err != nil {
 				log.Fatalf("error when generate YTA account from ethereum address: %s\n", err.Error())
 			}
-			m := dai.NewMapping(vLog.TxHash.Hex(), int(vLog.BlockNumber), freezedEvent.Sender.Hex(), freezedEvent.Balance.String(), string(freezedEvent.Data), 0, "", 0, ytaAccount, "", 0)
+			m := dai.NewMapping(vLog.TxHash.Hex(), int(vLog.BlockNumber), freezedEvent.Sender.Hex(), freezedEvent.Balance.String(), string(freezedEvent.Data), 0, "", 0, ytaAccount, "", 0, "", "", 0)
 			mappings[m.TransactionHash] = m
 		}
 	}

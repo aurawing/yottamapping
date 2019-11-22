@@ -16,8 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
 	ym "github.com/aurawing/yottamapping"
 	"github.com/spf13/cobra"
 )
@@ -33,7 +31,8 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("verify called")
+		mapper := ym.NewMapper(apiURL, ethURL, ytaContractAddr, mapContractAddr, fromIP, fromPort, fromUsername, fromPassword, fromDbname, toIP, toPort, toUsername, toPassword, toDbname)
+		mapper.PullData()
 	},
 }
 
@@ -57,21 +56,18 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	verifyCmd.Flags().StringVarP(&apiURL, "api-url", "a", "http://api-cn.etherscan.com/api", "etherscan API URL")
 	verifyCmd.Flags().StringVarP(&ethURL, "eth-url", "e", "https://ropsten.infura.io", "ethereum connection URL")
-	verifyCmd.Flags().StringVarP(&ytaContractAddr, "yta-contract-addr", "y", "0x56E5B0BDaea3c33a8EC723E2E038453E84C14bA7", "contract address of yottamapping contract")
-	verifyCmd.Flags().StringVarP(&mapContractAddr, "map-contract-addr", "m", "0x103b8c9e072193F2D0E3B77cEfb6d5DC9294d0d2", "contract address of yottacoin contract")
-	verifyCmd.Flags().StringVarP(&fromIP, "from-ip", "i", "127.0.0.1", "IP address of source database")
+	verifyCmd.Flags().StringVarP(&ytaContractAddr, "yta-contract-addr", "y", "0x103b8c9e072193F2D0E3B77cEfb6d5DC9294d0d2", "contract address of yottamapping contract")
+	verifyCmd.Flags().StringVarP(&mapContractAddr, "map-contract-addr", "m", "0x56E5B0BDaea3c33a8EC723E2E038453E84C14bA7", "contract address of yottacoin contract")
+	verifyCmd.Flags().StringVarP(&fromIP, "from-ip", "i", "rm-2ze0y94f9up0nyhvrto.mysql.rds.aliyuncs.com", "IP address of source database")
 	verifyCmd.Flags().IntVarP(&fromPort, "from-port", "p", 3306, "port number of source database")
-	verifyCmd.Flags().StringVarP(&fromUsername, "from-username", "u", "root", "username of source database")
-	verifyCmd.Flags().StringVarP(&fromPassword, "from-password", "w", "", "password of source database")
-	verifyCmd.Flags().StringVarP(&fromDbname, "from-dbname", "n", "yottamapping", "name of source database")
+	verifyCmd.Flags().StringVarP(&fromUsername, "from-username", "u", "mapping", "username of source database")
+	verifyCmd.Flags().StringVarP(&fromPassword, "from-password", "w", "Yotta123", "password of source database")
+	verifyCmd.Flags().StringVarP(&fromDbname, "from-dbname", "n", "test_mapping", "name of source database")
 	verifyCmd.Flags().StringVarP(&toIP, "to-ip", "j", "127.0.0.1", "IP address of destination database")
 	verifyCmd.Flags().IntVarP(&toPort, "to-port", "q", 3306, "port number of destination database")
 	verifyCmd.Flags().StringVarP(&toUsername, "to-username", "v", "root", "username of destination database")
 	verifyCmd.Flags().StringVarP(&toPassword, "to-password", "x", "", "password of destination database")
-	verifyCmd.Flags().StringVarP(&toDbname, "to-dbname", "o", "yottamapping", "name of destination database")
-
-	mapper := ym.NewMapper(apiURL, ethURL, contractAddr, fromIP, fromPort, fromUsername, fromPassword, fromDbname, toIP, toPort, toUsername, toPassword, toDbname)
-	mapper.PullData()
+	verifyCmd.Flags().StringVarP(&toDbname, "to-dbname", "o", "test", "name of destination database")
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:

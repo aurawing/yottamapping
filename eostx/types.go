@@ -12,7 +12,7 @@ type PayDepPool struct {
 
 //LockTransfer block rule
 type LockTransfer struct {
-	LockRuleID uint64          `json:"lockruleid"`
+	LockRuleID int64           `json:"lockruleid"`
 	From       eos.AccountName `json:"from"`
 	To         eos.AccountName `json:"to"`
 	Quantity   eos.Asset       `json:"quantity"`
@@ -23,5 +23,5 @@ type LockTransfer struct {
 //FrozenUser add fronzen rule to user
 type FrozenUser struct {
 	AccountName eos.AccountName `json:"account_name"`
-	Time        uint64          `json:"time"`
+	Time        int64           `json:"time"`
 }
