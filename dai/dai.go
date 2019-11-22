@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/aurawing/yottamapping/etherscan"
 	_ "github.com/go-sql-driver/mysql" // driver auto register
@@ -30,7 +31,7 @@ func (dai *Dai) Close() error {
 //FetchNewData fetch new data from upstream database
 func (dai *Dai) FetchNewData(from, to int) []*Mapping {
 	mappings := make([]*Mapping, 0)
-	rows, err := dai.db.Query("select transactionHash,blockNumber,ethAddress,balance,param,isVote,nodeAccount from mapping where blockBumber between ? and ?", from, to)
+	rows, err := dai.db.Query("select transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount from mapping where blockNumber between ? and ?", from, to)
 	checkErr(err)
 	for rows.Next() {
 		var transactionHash string
@@ -44,7 +45,7 @@ func (dai *Dai) FetchNewData(from, to int) []*Mapping {
 		checkErr(err)
 		ytaAccount, err := EthAddrToName(ethAddress)
 		checkErr(err)
-		mappings = append(mappings, NewMapping(transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, 0, ytaAccount, "", 0))
+		mappings = append(mappings, NewMapping(transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, 0, ytaAccount, "", 0, "", "", time.Now().Unix()))
 	}
 	return mappings
 }
@@ -61,7 +62,7 @@ func (dai *Dai) GetBkRange() *BkRange {
 func (dai *Dai) UpdateLocalData(mappings []*Mapping, v Verifier, from, to int) error {
 	tx, err := dai.db.Begin()
 	checkErr(err)
-	stmt, err := tx.Prepare("insert into mapping (transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, status, ytaAccount, blockRule, fronzenTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	stmt, err := tx.Prepare("insert into mapping (transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, status, ytaAccount, blockRule, fronzenTime, modifyTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		tx.Rollback()
 		checkErr(err)
@@ -70,7 +71,7 @@ func (dai *Dai) UpdateLocalData(mappings []*Mapping, v Verifier, from, to int) e
 		if v(m) {
 			m.Status = 1
 		}
-		_, err = stmt.Exec(m.TransactionHash, m.BlockNumber, m.EthAddress, m.Balance, m.Param, m.IsVote, m.NodeAccount, m.Status, m.YtaAccount, m.BlockRule, m.FronzenTime)
+		_, err = stmt.Exec(m.TransactionHash, m.BlockNumber, m.EthAddress, m.Balance, m.Param, m.IsVote, m.NodeAccount, m.Status, m.YtaAccount, m.BlockRule, m.FronzenTime, time.Now().Unix())
 		if err != nil {
 			tx.Rollback()
 			checkErr(err)
