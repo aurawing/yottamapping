@@ -31,7 +31,7 @@ func (mapper *Mapper) Verify(mappings map[string]*dai.Mapping) dai.Verifier {
 			log.Printf("param in DB is not equal to event: %s %s %s\n", m.TransactionHash, m.Param, mv.Param)
 			return false
 		}
-		ruleMap := mapper.to.EtherscanCli.MappingRuleID(m.EthAddress, m.BlockNumber)
+		ruleMap := mapper.etherscanCli.MappingRuleID(m.EthAddress, m.BlockNumber)
 		if len(ruleMap) > 0 {
 			ruleMapJSON, err := json.Marshal(ruleMap)
 			if err != nil {
@@ -41,7 +41,7 @@ func (mapper *Mapper) Verify(mappings map[string]*dai.Mapping) dai.Verifier {
 		}
 		timestamp := mapper.ethcli.GetFrozenTime(m.EthAddress)
 		if timestamp > 1574319600 {
-			m.FronzenTime = timestamp
+			m.FrozenTime = timestamp
 		}
 		return true
 	}

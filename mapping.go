@@ -1,47 +1,95 @@
 package yottamapping
 
 import (
+	"encoding/json"
 	"log"
+	"strconv"
+	"strings"
 
 	dai "github.com/aurawing/yottamapping/dai"
-	ethc "github.com/aurawing/yottamapping/eth"
+	eostx "github.com/aurawing/yottamapping/eostx"
 )
 
-//Mapper structure
-type Mapper struct {
-	ethcli *ethc.Cli
-	from   *dai.Dai
-	to     *dai.Dai
-}
-
-//NewMapper create a new mapper structure
-func NewMapper(apiURL, ethURL, ytaContractAddr, mapContractAddr, fromIP string, fromPort int, fromUsername, fromPassword, fromDbname, toIP string, toPort int, toUsername, toPassword, toDbname string) *Mapper {
+//NewMapper2 create a new mapper structure
+func NewMapper2(dbIP string, dbPort int, dbUsername, dbPassword, dbName, eosURL, adminAccount, adminPK, lockAccount, lockPK, operatorAccount, operatorPK, userPK string, cpuStake, netStake int64) *Mapper {
 	return &Mapper{
-		ethcli: ethc.NewClient(ethURL, ytaContractAddr, mapContractAddr),
-		from:   dai.New(fromIP, fromPort, fromUsername, fromPassword, fromDbname, apiURL, mapContractAddr),
-		to:     dai.New(toIP, toPort, toUsername, toPassword, toDbname, apiURL, mapContractAddr),
+		to:  dai.New(dbIP, dbPort, dbUsername, dbPassword, dbName),
+		etx: eostx.New(eosURL, adminAccount, adminPK, lockAccount, lockPK, operatorAccount, operatorPK, userPK, cpuStake, netStake),
 	}
 }
 
-//PullData pull data from upstream database and update local database
-func (mapper *Mapper) PullData() {
-	fromBkRange := mapper.from.GetBkRange()
-	toBkRange := mapper.to.GetBkRange()
-	if fromBkRange.End <= toBkRange.End {
-		log.Fatalf("no new data for fetching, latest block number: %d\n", toBkRange.End)
-	}
-	log.Printf("fetching data of source database from block %d to %d...\n", toBkRange.End+1, fromBkRange.End)
-	dbMappings := mapper.from.FetchNewData(toBkRange.End+1, fromBkRange.End)
-	log.Printf("fetched %d records in source database\n", len(dbMappings))
-	log.Printf("fetching events on ethereum network...\n")
-	bkMappings, err := mapper.ethcli.GetFreezedLogs(toBkRange.End+1, fromBkRange.End)
-	if err != nil {
-		log.Fatalf("get freezed logs failed: %s\n", err.Error())
-	}
-	log.Printf("fetched %d events on ethereum network\n", len(bkMappings))
-	log.Printf("verifying and updating local database...\n")
-	err = mapper.to.UpdateLocalData(dbMappings, mapper.Verify(bkMappings), toBkRange.End+1, fromBkRange.End)
-	if err != nil {
-		log.Fatalf("please check local database, error happens when commit: %s\n", err.Error())
-	}
+//CreateAccountAndTransfer create a new account on YTA mainnet and do airdrop
+func (mapper *Mapper) CreateAccountAndTransfer() {
+	mapper.to.BrowserAndModify(func(m *dai.Mapping) {
+		var s string
+		if len(m.Balance) <= 14 {
+			s = "0"
+		} else {
+			s = m.Balance[0 : len(m.Balance)-14]
+		}
+		bal, err := strconv.ParseInt(s, 10, 64)
+		if err != nil {
+			log.Fatalf("transfer: error when convert balance string to int64: %s\n", err.Error())
+		}
+		var needVote bool
+		var status int
+		if m.IsVote == 1 {
+			needVote = true
+			status = 2
+		} else {
+			needVote = false
+			status = 9
+		}
+		var blockMap map[int]int64
+		if m.BlockRule != "" {
+			err := json.Unmarshal([]byte(m.BlockRule), &blockMap)
+			if err != nil {
+				log.Fatalf("transfer: error when unmarshal block rule to map: %s\n", err.Error())
+			}
+		}
+		txid, err := mapper.etx.CreateAccountTx(m.YtaAccount, string(m.Param[1:]), bal, m.FrozenTime, needVote, blockMap)
+		if err != nil {
+			if strings.Contains(err.Error(), "Account name already exists") {
+				log.Printf("transfer: account has been created: %s\n", m.YtaAccount)
+			} else {
+				log.Fatalf("transfer: error happens when create YTA account: %s\n", err.Error())
+			}
+		} else {
+			log.Printf("transfer: create account %s successful, TXID: %s\n", m.YtaAccount, txid)
+		}
+		mapper.to.UpdateTxid1(m.TransactionHash, txid, status)
+		log.Printf("transfer: update database successful, account: %s, TXID: %s\n", m.YtaAccount, txid)
+	}, 1)
+}
+
+//Vote do voting
+func (mapper *Mapper) Vote() {
+	mapper.to.BrowserAndModify(func(m *dai.Mapping) {
+		if m.TxID1 != "" && !mapper.etx.IfTransactioIrreversible(m.TxID1) {
+			log.Printf("vote: transaction %s is not irreversible, skip\n", m.TxID1)
+			return
+		}
+		var s string
+		if len(m.Balance) <= 14 {
+			s = "0"
+		} else {
+			s = m.Balance[0 : len(m.Balance)-14]
+		}
+		bal, err := strconv.ParseInt(s, 10, 64)
+		if err != nil {
+			log.Fatalf("vote: error when convert balance string to int64: %s\n", err.Error())
+		}
+		txid, err := mapper.etx.VoteTx(m.YtaAccount, string(m.Param[1:]), bal, m.FrozenTime, m.NodeAccount)
+		if err != nil {
+			if strings.Contains(err.Error(), "does not have signatures for it under a provided delay") {
+				log.Printf("voting has been done: %s\n", m.YtaAccount)
+			} else {
+				log.Fatalf("error happens when create YTA account: %s\n", err.Error())
+			}
+		} else {
+			log.Printf("account %s do voting successful, TXID: %s\n", m.YtaAccount, txid)
+		}
+		mapper.to.UpdateTxid2(m.TransactionHash, txid, 9)
+		log.Printf("update database successful, account: %s, TXID: %s\n", m.YtaAccount, txid)
+	}, 2)
 }

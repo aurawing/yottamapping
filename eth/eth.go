@@ -44,8 +44,7 @@ func NewClient(url, ytaContractAddr, mapContractAddr string) *Cli {
 
 //GetFrozenTime get frozen timestamp of one address
 func (cli *Cli) GetFrozenTime(addr string) int64 {
-	address := common.HexToAddress(addr)
-	instance, err := ytc.NewYtc(address, cli.client)
+	instance, err := ytc.NewYtc(cli.ytaContractAddr, cli.client)
 	if err != nil {
 		log.Fatalf("error when create instance of yottacoin stub: %s\n", err.Error())
 	}

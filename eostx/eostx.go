@@ -3,6 +3,7 @@ package eostx
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/eoscanada/eos-go"
 	"github.com/eoscanada/eos-go/ecc"
@@ -25,8 +26,8 @@ type EosTX struct {
 	netStake        int64
 }
 
-// NewInstance create a new eostx instance contans connect url, contract owner and it's private key
-func NewInstance(url, adminAccount, adminPK, lockAccount, lockPK, operatorAccount, operatorPK, userPK string, cpuStake, netStake int64) *EosTX {
+// New create a new eostx instance contans connect url, contract owner and it's private key
+func New(url, adminAccount, adminPK, lockAccount, lockPK, operatorAccount, operatorPK, userPK string, cpuStake, netStake int64) *EosTX {
 	api := eos.New(url)
 	keyBag := &eos.KeyBag{}
 	err := keyBag.ImportPrivateKey(adminPK)
@@ -40,8 +41,20 @@ func NewInstance(url, adminAccount, adminPK, lockAccount, lockPK, operatorAccoun
 	return &EosTX{API: api, adminAccount: adminAccount, adminPK: adminPK, lockAccount: lockAccount, lockPK: lockPK, operatorAccount: operatorAccount, operatorPK: operatorPK, userPK: userPK, cpuStake: cpuStake, netStake: netStake}
 }
 
+//IfTransactioIrreversible check if transaction is irreversiblen
+func (eostx *EosTX) IfTransactioIrreversible(txid string) bool {
+	resp, err := eostx.API.GetTransaction(txid)
+	if err != nil {
+		log.Fatalf("error happens when get transaction information: %s\n", err.Error())
+	}
+	return resp.LastIrreversibleBlock > resp.BlockNum
+}
+
 //CreateAccountTx create a new account and add block rules
 func (eostx *EosTX) CreateAccountTx(userAccount, userPubkey string, balance int64, frozenTime int64, needVote bool, blockMap map[int]int64) (string, error) {
+	if strings.HasPrefix(userPubkey, "YTA") {
+		userPubkey = fmt.Sprintf("%s%s", "EOS", strings.TrimLeft(userPubkey, "YTA"))
+	}
 	eostx.API.SetCustomGetRequiredKeys(func(tx *eos.Transaction) ([]ecc.PublicKey, error) {
 		publickey1, err := ytcrypto.GetPublicKeyByPrivateKey(eostx.adminPK)
 		pubkey1, err := ecc.NewPublicKey(fmt.Sprintf("%s%s", "EOS", publickey1))
@@ -120,7 +133,10 @@ func (eostx *EosTX) CreateAccountTx(userAccount, userPubkey string, balance int6
 }
 
 //VoteTx do voting
-func (eostx *EosTX) VoteTx(userAccount, userPubkey string, balance int64, frozenTime int64, voteAccount string, blockMap map[int]int64) (string, error) {
+func (eostx *EosTX) VoteTx(userAccount, userPubkey string, balance int64, frozenTime int64, voteAccount string) (string, error) {
+	if strings.HasPrefix(userPubkey, "YTA") {
+		userPubkey = fmt.Sprintf("%s%s", "EOS", strings.TrimLeft(userPubkey, "YTA"))
+	}
 	eostx.API.SetCustomGetRequiredKeys(func(tx *eos.Transaction) ([]ecc.PublicKey, error) {
 		publickey1, err := ytcrypto.GetPublicKeyByPrivateKey(eostx.lockPK)
 		pubkey1, err := ecc.NewPublicKey(fmt.Sprintf("%s%s", "EOS", publickey1))

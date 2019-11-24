@@ -3,6 +3,9 @@ package dai
 //Verifier verify mapping data
 type Verifier func(*Mapping) bool
 
+//Modifier modify mapping data
+type Modifier func(*Mapping)
+
 //Mapping structure
 type Mapping struct {
 	TransactionHash string
@@ -15,7 +18,7 @@ type Mapping struct {
 	Status          int
 	YtaAccount      string
 	BlockRule       string
-	FronzenTime     int64
+	FrozenTime      int64
 	TxID1           string
 	TxID2           string
 	ModifyTime      int64
@@ -28,7 +31,7 @@ type BkRange struct {
 }
 
 //NewMapping create a new mapping structure
-func NewMapping(transactionHash string, blockNumber int, ethAddress, balance, param string, isVote int, nodeAccount string, status int, ytaAccount, blockRule string, fronzenTime int64, txid1, txid2 string, modifyTime int64) *Mapping {
+func NewMapping(transactionHash string, blockNumber int, ethAddress, balance, param string, isVote int, nodeAccount string, status int, ytaAccount, blockRule string, frozenTime int64, txid1, txid2 string, modifyTime int64) *Mapping {
 	return &Mapping{
 		TransactionHash: transactionHash,
 		BlockNumber:     blockNumber,
@@ -40,7 +43,7 @@ func NewMapping(transactionHash string, blockNumber int, ethAddress, balance, pa
 		Status:          status,
 		YtaAccount:      ytaAccount,
 		BlockRule:       blockRule,
-		FronzenTime:     fronzenTime,
+		FrozenTime:      frozenTime,
 		TxID1:           txid1,
 		TxID2:           txid2,
 		ModifyTime:      modifyTime,

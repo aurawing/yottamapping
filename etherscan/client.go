@@ -49,8 +49,8 @@ func (cli *Cli) GetTxList(addr string, blockNumber int) []*Tx {
 	if err != nil {
 		log.Fatalf("error when unmarshal response of tx list: %s\n", err.Error())
 	}
-	if resp.Status != "1" {
-		log.Fatalf("response status is not 1: %s %s\n", resp.Status, resp.Message)
+	if resp.Status != "0" && resp.Status != "1" {
+		log.Fatalf("response status is not 0 or 1: %s %s\n", resp.Status, resp.Message)
 	}
 	return resp.Result
 }
@@ -64,7 +64,8 @@ func (cli *Cli) MappingRuleID(addr string, blockNumber int) map[int]int64 {
 		if tx.To == addr && RuleMap[tx.From] > 0 {
 			var v string
 			if len(tx.Value) <= 14 {
-				v = "0"
+				// v = "0"
+				continue
 			} else {
 				v = tx.Value[0 : len(tx.Value)-14]
 			}

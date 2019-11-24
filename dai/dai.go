@@ -6,21 +6,19 @@ import (
 	"log"
 	"time"
 
-	"github.com/aurawing/yottamapping/etherscan"
 	_ "github.com/go-sql-driver/mysql" // driver auto register
 )
 
 //Dai data access interface
 type Dai struct {
-	db           *sql.DB
-	EtherscanCli *etherscan.Cli
+	db *sql.DB
 }
 
 //New create new Dao instance
-func New(ip string, port int, username, password, dbname, apiURL, contractAddr string) *Dai {
+func New(ip string, port int, username, password, dbname string) *Dai {
 	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8", username, password, ip, port, dbname))
 	checkErr(err)
-	return &Dai{db: db, EtherscanCli: etherscan.NewCli(apiURL, contractAddr)}
+	return &Dai{db: db}
 }
 
 //Close close driver
@@ -33,7 +31,9 @@ func (dai *Dai) FetchNewData(from, to int) []*Mapping {
 	mappings := make([]*Mapping, 0)
 	rows, err := dai.db.Query("select transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount from mapping where blockNumber between ? and ?", from, to)
 	checkErr(err)
+	i := 0
 	for rows.Next() {
+		i++
 		var transactionHash string
 		var blockNumber int
 		var ethAddress string
@@ -46,6 +46,7 @@ func (dai *Dai) FetchNewData(from, to int) []*Mapping {
 		ytaAccount, err := EthAddrToName(ethAddress)
 		checkErr(err)
 		mappings = append(mappings, NewMapping(transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, 0, ytaAccount, "", 0, "", "", time.Now().Unix()))
+		log.Printf("fetched mapping record %d from upstream database: %s %s %s\n", i, transactionHash, ethAddress, ytaAccount)
 	}
 	return mappings
 }
@@ -62,7 +63,7 @@ func (dai *Dai) GetBkRange() *BkRange {
 func (dai *Dai) UpdateLocalData(mappings []*Mapping, v Verifier, from, to int) error {
 	tx, err := dai.db.Begin()
 	checkErr(err)
-	stmt, err := tx.Prepare("insert into mapping (transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, status, ytaAccount, blockRule, fronzenTime, modifyTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	stmt, err := tx.Prepare("insert into mapping (transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, status, ytaAccount, blockRule, frozenTime, modifyTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		tx.Rollback()
 		checkErr(err)
@@ -70,8 +71,10 @@ func (dai *Dai) UpdateLocalData(mappings []*Mapping, v Verifier, from, to int) e
 	for _, m := range mappings {
 		if v(m) {
 			m.Status = 1
+		} else {
+			log.Printf("verify data failed: %s\n", m.TransactionHash)
 		}
-		_, err = stmt.Exec(m.TransactionHash, m.BlockNumber, m.EthAddress, m.Balance, m.Param, m.IsVote, m.NodeAccount, m.Status, m.YtaAccount, m.BlockRule, m.FronzenTime, time.Now().Unix())
+		_, err = stmt.Exec(m.TransactionHash, m.BlockNumber, m.EthAddress, m.Balance, m.Param, m.IsVote, m.NodeAccount, m.Status, m.YtaAccount, m.BlockRule, m.FrozenTime, time.Now().Unix())
 		if err != nil {
 			tx.Rollback()
 			checkErr(err)
@@ -97,6 +100,73 @@ func (dai *Dai) UpdateLocalData(mappings []*Mapping, v Verifier, from, to int) e
 		log.Fatalf("update bkrange failed, affect rows: %d\n", affect)
 	}
 	return tx.Commit()
+}
+
+//BrowserAndModify browser mapping datas and modify by function Modifier
+func (dai *Dai) BrowserAndModify(m Modifier, status int) {
+	rows, err := dai.db.Query("select transactionHash, blockNumber, ethAddress, balance, param, status, isVote, nodeAccount, ytaAccount, blockRule, frozenTime, txid1, txid2, modifyTime from mapping where status=?", status)
+	checkErr(err)
+	i := 0
+	for rows.Next() {
+		i++
+		var transactionHash string
+		var blockNumber int
+		var ethAddress string
+		var balance string
+		var param string
+		var status int
+		var isVote int
+		var nodeAccount string
+		var ytaAccount string
+		var blockRule string
+		var frozenTime int64
+		var txid1 string
+		var txid2 string
+		var modifyTime int64
+		err := rows.Scan(&transactionHash, &blockNumber, &ethAddress, &balance, &param, &status, &isVote, &nodeAccount, &ytaAccount, &blockRule, &frozenTime, &txid1, &txid2, &modifyTime)
+		checkErr(err)
+		mapping := NewMapping(transactionHash, blockNumber, ethAddress, balance, param, isVote, nodeAccount, status, ytaAccount, blockRule, frozenTime, txid1, txid2, modifyTime)
+		log.Printf("fetched mapping record %d from local database: %s %s %s\n", i, transactionHash, ethAddress, ytaAccount)
+		m(mapping)
+	}
+}
+
+//UpdateTxid1 update txid1 field after create new YTA account
+func (dai *Dai) UpdateTxid1(txHash, txid1 string, status int) {
+	stmt, err := dai.db.Prepare("update mapping set txid1=?, status=?, modifyTime=? where transactionHash=?")
+	if err != nil {
+		checkErr(err)
+	}
+	res, err := stmt.Exec(txid1, status, time.Now().Unix(), txHash)
+	if err != nil {
+		checkErr(err)
+	}
+	affect, err := res.RowsAffected()
+	if err != nil {
+		checkErr(err)
+	}
+	if affect != 1 {
+		log.Fatalf("update txid1 failed,transactionHash: %s, affect rows: %d\n", txHash, affect)
+	}
+}
+
+//UpdateTxid2 update txid2 field after voting
+func (dai *Dai) UpdateTxid2(txHash, txid2 string, status int) {
+	stmt, err := dai.db.Prepare("update mapping set txid2=?, status=?, modifyTime=? where transactionHash=?")
+	if err != nil {
+		checkErr(err)
+	}
+	res, err := stmt.Exec(txid2, status, time.Now().Unix(), txHash)
+	if err != nil {
+		checkErr(err)
+	}
+	affect, err := res.RowsAffected()
+	if err != nil {
+		checkErr(err)
+	}
+	if affect != 1 {
+		log.Fatalf("update txid2 failed,transactionHash: %s, affect rows: %d\n", txHash, affect)
+	}
 }
 
 func checkErr(err error) {

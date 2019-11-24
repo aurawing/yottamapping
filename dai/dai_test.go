@@ -16,3 +16,10 @@ func TestGetBkRange(t *testing.T) {
 	r := d.GetBkRange()
 	t.Logf("Get block range: %d\n", r.End)
 }
+
+func TestBrowserAndModify(t *testing.T) {
+	d.BrowserAndModify(func(m *Mapping) bool {
+		t.Logf("get mapping data: %s\n", m.TransactionHash)
+		return true
+	})
+}
