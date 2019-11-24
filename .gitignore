@@ -29,4 +29,7 @@
 ### Glide lock file ###
 glide.lock
 
+### Code Counter report ###
+.CodeCounter/*
+
 # End of https://www.gitignore.io/api/go,visualstudiocode

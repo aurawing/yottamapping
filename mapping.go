@@ -2,6 +2,7 @@ package yottamapping
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -30,6 +31,21 @@ func (mapper *Mapper) CreateAccountAndTransfer() {
 		bal, err := strconv.ParseInt(s, 10, 64)
 		if err != nil {
 			log.Fatalf("transfer: error when convert balance string to int64: %s\n", err.Error())
+		}
+		if bal > 10000 {
+			var input string
+			fmt.Printf("地址%s余额为%d, 是否转账?(Y/N): ", m.EthAddress, bal)
+			for {
+				fmt.Scanln(&input)
+				if input == "Y" || input == "y" {
+					break
+				} else if input == "N" || input == "n" {
+					log.Printf("取消该账号的转账操作")
+					return
+				} else {
+					fmt.Printf("请输入Y或N: ")
+				}
+			}
 		}
 		var needVote bool
 		var status int

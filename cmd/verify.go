@@ -26,12 +26,12 @@ var verifyCmd = &cobra.Command{
 	Short: "从同步数据库拉取并校验数据",
 	Long:  `当上游的同步数据库增量获取映射数据并入库后，本程序将同步这部分数据，同时在以太坊主链上校验其真实性，校验通过的数据会写入本地数据库`,
 	Run: func(cmd *cobra.Command, args []string) {
-		mapper := ym.NewMapper1(apiURL, ethURL, ytaContractAddr, mapContractAddr, fromIP, fromPort, fromUsername, fromPassword, fromDbname, toIP, toPort, toUsername, toPassword, toDbname)
+		mapper := ym.NewMapper1(etherscanAPIURL, ethURL, ytaContractAddr, mapContractAddr, fromIP, fromPort, fromUsername, fromPassword, fromDbname, toIP, toPort, toUsername, toPassword, toDbname)
 		mapper.PullData()
 	},
 }
 
-var apiURL string
+var etherscanAPIURL string
 var ethURL string
 var ytaContractAddr string
 var mapContractAddr string
@@ -49,7 +49,7 @@ var toDbname string
 func init() {
 	rootCmd.AddCommand(verifyCmd)
 	// Here you will define your flags and configuration settings.
-	verifyCmd.Flags().StringVarP(&apiURL, "api-url", "a", "http://ropsten.etherscan.io/api", "etherscan API URL")
+	verifyCmd.Flags().StringVarP(&etherscanAPIURL, "api-url", "a", "http://ropsten.etherscan.io/api", "etherscan API URL")
 	verifyCmd.Flags().StringVarP(&ethURL, "eth-url", "e", "https://ropsten.infura.io", "ethereum connection URL")
 	verifyCmd.Flags().StringVarP(&ytaContractAddr, "yta-contract-addr", "y", "0x103b8c9e072193F2D0E3B77cEfb6d5DC9294d0d2", "contract address of yottamapping contract")
 	verifyCmd.Flags().StringVarP(&mapContractAddr, "map-contract-addr", "m", "0x56E5B0BDaea3c33a8EC723E2E038453E84C14bA7", "contract address of yottacoin contract")
