@@ -384,10 +384,13 @@ var initCmd = &cobra.Command{
 
 		c, err := json.Marshal(config)
 		if err != nil {
-			panic(fmt.Sprintf("配置文件序列化JSON失败: %s", err.Error()))
+			panic(fmt.Sprintf("\n配置文件序列化JSON失败: %s", err.Error()))
 		}
 
-		encConfig := AES256GCMEncrypt(c, password)
+		encConfig, err := AES256GCMEncrypt(c, password)
+		if err != nil {
+			panic(fmt.Sprintf(fmt.Sprintf("\n加密配置文件失败: %s", err.Error())))
+		}
 
 		if delConfig {
 			err := os.Remove(configPath)
@@ -398,9 +401,9 @@ var initCmd = &cobra.Command{
 
 		err = ioutil.WriteFile(configPath, encConfig, 0666)
 		if err != nil {
-			panic(fmt.Sprintf("写入配置文件错误：%s\n", err.Error()))
+			panic(fmt.Sprintf("\n写入配置文件错误：%s\n", err.Error()))
 		}
-		fmt.Printf("初始化完毕，已写入加密配置文件：%s\n", configPath)
+		fmt.Printf("\n初始化完毕，已写入加密配置文件：%s\n", configPath)
 
 		//fmt.Println(string(AES256GCMDecrypt(encConfig, password)))
 	},
