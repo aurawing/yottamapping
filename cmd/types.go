@@ -27,4 +27,5 @@ type Config struct {
 	CPUStake        uint64 `json:"cpuStake"`
 	NetStake        uint64 `json:"netStake"`
 	RAMStake        uint64 `json:"ramStake"`
+	BalThreshold    int64  `json:"balThreshold"`
 }

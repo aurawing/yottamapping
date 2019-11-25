@@ -355,6 +355,23 @@ var initCmd = &cobra.Command{
 			}
 		}
 
+		fmt.Print("请输入允许自动转账的额度上限（默认为5000000000）: ")
+		for {
+			balThresholdStr, _ := reader.ReadString('\n')
+			balThresholdStr = RemoveBlank(balThresholdStr)
+			if balThresholdStr == "" {
+				balThresholdStr = "5000000000"
+			}
+			config.BalThreshold, err = strconv.ParseInt(balThresholdStr, 10, 64)
+			if err != nil {
+				fmt.Print("格式错误，请重新输入: ")
+			} else if config.BalThreshold <= 0 {
+				fmt.Print("格式错误，请重新输入: ")
+			} else {
+				break
+			}
+		}
+
 		fmt.Print("请输入配置文件加密密码(长度不小于10): ")
 		for {
 			bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))

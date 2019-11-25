@@ -14,4 +14,5 @@ type Mapper struct {
 	ethcli       *eth.Cli
 	etherscanCli *etherscan.Cli
 	etx          *eostx.EosTX
+	balThreshold int64
 }

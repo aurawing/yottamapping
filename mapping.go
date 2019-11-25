@@ -1,9 +1,11 @@
 package yottamapping
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 
@@ -12,10 +14,11 @@ import (
 )
 
 //NewMapper2 create a new mapper structure
-func NewMapper2(dbIP string, dbPort int, dbUsername, dbPassword, dbName, eosURL, adminAccount, adminPK, lockAccount, lockPK, operatorAccount, operatorPK, userPK string, cpuStake, netStake int64) *Mapper {
+func NewMapper2(dbIP string, dbPort int, dbUsername, dbPassword, dbName, eosURL, adminAccount, adminPK, lockAccount, lockPK, operatorAccount, operatorPK, userPK string, cpuStake, netStake, balThreshold int64) *Mapper {
 	return &Mapper{
-		to:  dai.New(dbIP, dbPort, dbUsername, dbPassword, dbName),
-		etx: eostx.New(eosURL, adminAccount, adminPK, lockAccount, lockPK, operatorAccount, operatorPK, userPK, cpuStake, netStake),
+		to:           dai.New(dbIP, dbPort, dbUsername, dbPassword, dbName),
+		etx:          eostx.New(eosURL, adminAccount, adminPK, lockAccount, lockPK, operatorAccount, operatorPK, userPK, cpuStake, netStake),
+		balThreshold: balThreshold,
 	}
 }
 
@@ -32,15 +35,15 @@ func (mapper *Mapper) CreateAccountAndTransfer() {
 		if err != nil {
 			log.Fatalf("transfer: error when convert balance string to int64: %s\n", err.Error())
 		}
-		if bal > 10000 {
+		if bal > mapper.balThreshold {
 			var input string
-			fmt.Printf("地址%s余额为%d, 是否转账?(Y/N): ", m.EthAddress, bal)
+			fmt.Printf("!!! 地址%s余额为%d, 是否转账?(Y/N): ", m.EthAddress, bal)
 			for {
 				fmt.Scanln(&input)
 				if input == "Y" || input == "y" {
 					break
 				} else if input == "N" || input == "n" {
-					log.Printf("取消该账号的转账操作")
+					log.Println("取消该账号的转账操作")
 					return
 				} else {
 					fmt.Printf("请输入Y或N: ")
@@ -84,6 +87,21 @@ func (mapper *Mapper) Vote() {
 		if m.TxID1 != "" && !mapper.etx.IfTransactioIrreversible(m.TxID1) {
 			log.Printf("vote: transaction %s is not irreversible, skip\n", m.TxID1)
 			return
+		} else if m.TxID1 == "" {
+			reader := bufio.NewReader(os.Stdin)
+			fmt.Printf("账号%s的转账交易ID不存在，这可能是由于转账执行过程中死机或断电导致：请手动确认(Y/N): ", m.YtaAccount)
+			for {
+				yn, _ := reader.ReadString('\n')
+				yn = removeBlank(yn)
+				if yn == "Y" || yn == "y" {
+					break
+				} else if yn == "N" || yn == "n" {
+					fmt.Println("取消该账号的投票映射操作")
+					return
+				} else {
+					fmt.Print("请输入Y或N: ")
+				}
+			}
 		}
 		var s string
 		if len(m.Balance) <= 14 {
@@ -108,4 +126,11 @@ func (mapper *Mapper) Vote() {
 		mapper.to.UpdateTxid2(m.TransactionHash, txid, 9)
 		log.Printf("update database successful, account: %s, TXID: %s\n", m.YtaAccount, txid)
 	}, 2)
+}
+
+func removeBlank(str string) string {
+	str = strings.Replace(str, " ", "", -1)
+	str = strings.Replace(str, "\n", "", -1)
+	str = strings.Replace(str, "\r", "", -1)
+	return str
 }
