@@ -77,6 +77,9 @@ func (mapper *Mapper) CreateAccountAndTransfer() {
 			log.Printf("transfer: create account %s successful, TXID: %s\n", m.YtaAccount, txid)
 		}
 		mapper.to.UpdateTxid1(m.TransactionHash, txid, status)
+		if m.IsVote == 0 {
+			mapper.to.UpdateTxid2(m.TransactionHash, txid, status)
+		}
 		log.Printf("transfer: update database successful, account: %s, TXID: %s\n", m.YtaAccount, txid)
 	}, 1)
 }
@@ -89,7 +92,7 @@ func (mapper *Mapper) Vote() {
 			return
 		} else if m.TxID1 == "" {
 			reader := bufio.NewReader(os.Stdin)
-			fmt.Printf("账号%s的转账交易ID不存在，这可能是由于转账执行过程中死机或断电导致：请手动确认(Y/N): ", m.YtaAccount)
+			fmt.Printf("账号%s的转账交易ID不存在，这可能是由于转账执行过程中死机或断电导致，请手动确认(Y/N): ", m.YtaAccount)
 			for {
 				yn, _ := reader.ReadString('\n')
 				yn = removeBlank(yn)

@@ -1,6 +1,9 @@
 package eth
 
 import (
+	"context"
+	"fmt"
+	"log"
 	"os"
 	"testing"
 )
@@ -19,4 +22,13 @@ func TestGetFreezedLogs(t *testing.T) {
 	}
 	event := m["0x549f6b834b7e9bf2c0d7fc414406eb8e51b900de568fc909a277d8a0d58e2c6f"]
 	t.Logf("get freezed log successful: %s -> %s\n", event.EthAddress, event.Balance)
+}
+
+func TestLatestBlockNumber(t *testing.T) {
+	header, err := cli.client.HeaderByNumber(context.Background(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(header.Number.String()) // 5671744
 }
