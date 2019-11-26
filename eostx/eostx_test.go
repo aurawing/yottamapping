@@ -1,8 +1,12 @@
 package eostx
 
 import (
+	"encoding/json"
+	"fmt"
 	"os"
 	"testing"
+
+	"github.com/eoscanada/eos-go"
 )
 
 var etx *EosTX
@@ -27,4 +31,24 @@ func TestMappingTx(t *testing.T) {
 func TestIfTransactioIrreversible(t *testing.T) {
 	b := etx.IfTransactioIrreversible("d8815a3c582bc38469885a82fcd7a916f55ccef216d26234481b06678a409a42")
 	t.Logf("transaction is irreversible: %t\n", b)
+}
+
+func TestGetAccount(t *testing.T) {
+	account := eos.AccountName("yottaairdrop")
+	info, err := etx.API.GetAccount(account)
+	if err != nil {
+		if err == eos.ErrNotFound {
+			fmt.Printf("unknown account: %s", account)
+			return
+		}
+
+		panic(fmt.Errorf("get account: %s", err))
+	}
+
+	bytes, err := json.Marshal(info)
+	if err != nil {
+		panic(fmt.Errorf("json marshal response: %s", err))
+	}
+
+	fmt.Println(string(bytes))
 }

@@ -28,4 +28,5 @@ type Config struct {
 	NetStake        uint64 `json:"netStake"`
 	RAMStake        uint64 `json:"ramStake"`
 	BalThreshold    int64  `json:"balThreshold"`
+	TxTimeGap       uint64 `json:"txTimeGap"`
 }

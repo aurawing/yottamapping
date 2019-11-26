@@ -8,7 +8,7 @@ import (
 	"github.com/aurawing/yottamapping/etherscan"
 )
 
-//NewMapper create a new mapper structure
+//NewMapper1 create a new mapper structure
 func NewMapper1(apiURL, ethURL, ytaContractAddr, mapContractAddr, fromIP string, fromPort int, fromUsername, fromPassword, fromDbname, toIP string, toPort int, toUsername, toPassword, toDbname string) *Mapper {
 	return &Mapper{
 		from:         dai.New(fromIP, fromPort, fromUsername, fromPassword, fromDbname),

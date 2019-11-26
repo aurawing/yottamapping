@@ -15,4 +15,5 @@ type Mapper struct {
 	etherscanCli *etherscan.Cli
 	etx          *eostx.EosTX
 	balThreshold int64
+	txTimeGap    uint64
 }

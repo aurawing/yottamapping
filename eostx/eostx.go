@@ -41,6 +41,15 @@ func New(url, adminAccount, adminPK, lockAccount, lockPK, operatorAccount, opera
 	return &EosTX{API: api, adminAccount: adminAccount, adminPK: adminPK, lockAccount: lockAccount, lockPK: lockPK, operatorAccount: operatorAccount, operatorPK: operatorPK, userPK: userPK, cpuStake: cpuStake, netStake: netStake}
 }
 
+// //GetAvailableResources get value of all available resources
+// func (eostx *EosTX) GetAvailableResources(account string) (int64, int64, int64) {
+// 	info, err := eostx.API.GetAccount(eos.AN(account))
+// 	if err != nil {
+// 		panic(fmt.Sprintf("get available resources error: %s\n", err.Error()))
+// 	}
+// 	return int64(info.CPULimit.Available), int64(info.NetLimit.Available), int64(info.RAMQuota - info.RAMUsage)
+// }
+
 //IfTransactioIrreversible check if transaction is irreversiblen
 func (eostx *EosTX) IfTransactioIrreversible(txid string) bool {
 	resp, err := eostx.API.GetTransaction(txid)

@@ -56,7 +56,7 @@ var voteCmd = &cobra.Command{
 		}
 		fmt.Println()
 		fmt.Println()
-		mapper := ym.NewMapper2(config.ToIP, int(config.ToPort), config.ToUsername, config.ToPassword, config.ToDbname, config.EosURL, config.AdminAccount, config.AdminPK, config.LockAccount, config.LockPK, config.OperatorAccount, config.OperatorPK, config.UserPK, int64(config.CPUStake), int64(config.NetStake), config.BalThreshold)
+		mapper := ym.NewMapper2(config.ToIP, int(config.ToPort), config.ToUsername, config.ToPassword, config.ToDbname, config.EosURL, config.AdminAccount, config.AdminPK, config.LockAccount, config.LockPK, config.OperatorAccount, config.OperatorPK, config.UserPK, int64(config.CPUStake), int64(config.NetStake), config.BalThreshold, config.TxTimeGap)
 		mapper.Vote()
 	},
 }

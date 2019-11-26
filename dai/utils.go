@@ -22,6 +22,11 @@ func EthAddrToName(address string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("decode hex string failed: %s", err.Error())
 	}
-	v := uint64(binary.BigEndian.Uint64(b))
-	return eos.NameToString(v), nil
+	v := uint64(binary.LittleEndian.Uint64(b))
+	name := eos.NameToString(v)
+	if len(name) > 12 {
+		name = name[0:12]
+	}
+	name = strings.Replace(name, ".", "x", -1)
+	return name, nil
 }

@@ -1,6 +1,7 @@
 package dai
 
 import (
+	"fmt"
 	"os"
 	"testing"
 )
@@ -8,7 +9,7 @@ import (
 var d *Dai
 
 func TestMain(m *testing.M) {
-	d = New("127.0.0.1", 3306, "root", "", "test", "http://api-cn.etherscan.com/api", "0x103b8c9e072193F2D0E3B77cEfb6d5DC9294d0d2")
+	d = New("127.0.0.1", 3306, "root", "", "test")
 	os.Exit(m.Run())
 }
 
@@ -18,8 +19,13 @@ func TestGetBkRange(t *testing.T) {
 }
 
 func TestBrowserAndModify(t *testing.T) {
-	d.BrowserAndModify(func(m *Mapping) bool {
+	d.BrowserAndModify(func(m *Mapping) {
 		t.Logf("get mapping data: %s\n", m.TransactionHash)
-		return true
-	})
+		return
+	}, 1)
+}
+
+func TestNameToString(t *testing.T) {
+	n, _ := EthAddrToName("0x941Aa12a96012f6F1A3CC1C0aFa6537974C105ea")
+	fmt.Println(n)
 }

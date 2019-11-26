@@ -372,6 +372,23 @@ var initCmd = &cobra.Command{
 			}
 		}
 
+		fmt.Print("请输入事务提交间隔时间（默认为100ms）: ")
+		for {
+			txTimeGapStr, _ := reader.ReadString('\n')
+			txTimeGapStr = RemoveBlank(txTimeGapStr)
+			if txTimeGapStr == "" {
+				txTimeGapStr = "100"
+			}
+			config.TxTimeGap, err = strconv.ParseUint(txTimeGapStr, 10, 64)
+			if err != nil {
+				fmt.Print("格式错误，请重新输入: ")
+			} else if config.BalThreshold <= 0 {
+				fmt.Print("格式错误，请重新输入: ")
+			} else {
+				break
+			}
+		}
+
 		fmt.Print("请输入配置文件加密密码(长度不小于10): ")
 		for {
 			bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))

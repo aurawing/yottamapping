@@ -8,17 +8,19 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	dai "github.com/aurawing/yottamapping/dai"
 	eostx "github.com/aurawing/yottamapping/eostx"
 )
 
 //NewMapper2 create a new mapper structure
-func NewMapper2(dbIP string, dbPort int, dbUsername, dbPassword, dbName, eosURL, adminAccount, adminPK, lockAccount, lockPK, operatorAccount, operatorPK, userPK string, cpuStake, netStake, balThreshold int64) *Mapper {
+func NewMapper2(dbIP string, dbPort int, dbUsername, dbPassword, dbName, eosURL, adminAccount, adminPK, lockAccount, lockPK, operatorAccount, operatorPK, userPK string, cpuStake, netStake, balThreshold int64, txTimeGap uint64) *Mapper {
 	return &Mapper{
 		to:           dai.New(dbIP, dbPort, dbUsername, dbPassword, dbName),
 		etx:          eostx.New(eosURL, adminAccount, adminPK, lockAccount, lockPK, operatorAccount, operatorPK, userPK, cpuStake, netStake),
 		balThreshold: balThreshold,
+		txTimeGap:    txTimeGap,
 	}
 }
 
@@ -81,6 +83,9 @@ func (mapper *Mapper) CreateAccountAndTransfer() {
 			mapper.to.UpdateTxid2(m.TransactionHash, txid, status)
 		}
 		log.Printf("transfer: update database successful, account: %s, TXID: %s\n", m.YtaAccount, txid)
+		if mapper.txTimeGap > 0 {
+			time.Sleep(time.Duration(mapper.txTimeGap) * time.Millisecond)
+		}
 	}, 1)
 }
 
@@ -121,13 +126,16 @@ func (mapper *Mapper) Vote() {
 			if strings.Contains(err.Error(), "does not have signatures for it under a provided delay") {
 				log.Printf("voting has been done: %s\n", m.YtaAccount)
 			} else {
-				log.Fatalf("error happens when create YTA account: %s\n", err.Error())
+				log.Fatalf("error happens when do voting: %s\n", err.Error())
 			}
 		} else {
-			log.Printf("account %s do voting successful, TXID: %s\n", m.YtaAccount, txid)
+			log.Printf("account %s do voting for %s successful, TXID: %s\n", m.YtaAccount, m.NodeAccount, txid)
 		}
 		mapper.to.UpdateTxid2(m.TransactionHash, txid, 9)
 		log.Printf("update database successful, account: %s, TXID: %s\n", m.YtaAccount, txid)
+		if mapper.txTimeGap > 0 {
+			time.Sleep(time.Duration(mapper.txTimeGap) * time.Millisecond)
+		}
 	}, 2)
 }
 
