@@ -68,11 +68,13 @@ func (dai *Dai) UpdateLocalData(mappings []*Mapping, v Verifier, from, to int) e
 		tx.Rollback()
 		checkErr(err)
 	}
+	i := 0
 	for _, m := range mappings {
 		if v(m) {
 			m.Status = 1
 		} else {
-			log.Printf("verify data failed: %s\n", m.TransactionHash)
+			i++
+			log.Printf("!!! verify data failed: %s\n", m.TransactionHash)
 		}
 		_, err = stmt.Exec(m.TransactionHash, m.BlockNumber, m.EthAddress, m.Balance, m.Param, m.IsVote, m.NodeAccount, m.Status, m.YtaAccount, m.BlockRule, m.FrozenTime, time.Now().Unix())
 		if err != nil {
@@ -97,7 +99,12 @@ func (dai *Dai) UpdateLocalData(mappings []*Mapping, v Verifier, from, to int) e
 	}
 	if affect != 1 {
 		tx.Rollback()
-		log.Fatalf("update bkrange failed, affect rows: %d\n", affect)
+		log.Fatalf("!!! update bkrange failed, affect rows: %d\n", affect)
+	}
+	if i > 0 {
+		log.Printf("!!! %d mapping records failed to verify\n", i)
+	} else {
+		log.Printf("all incremental data fetched successfully!")
 	}
 	return tx.Commit()
 }

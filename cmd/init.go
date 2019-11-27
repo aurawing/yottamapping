@@ -372,12 +372,12 @@ var initCmd = &cobra.Command{
 			}
 		}
 
-		fmt.Print("请输入事务提交间隔时间（默认为100ms）: ")
+		fmt.Print("请输入事务提交间隔时间（默认为200ms）: ")
 		for {
 			txTimeGapStr, _ := reader.ReadString('\n')
 			txTimeGapStr = RemoveBlank(txTimeGapStr)
 			if txTimeGapStr == "" {
-				txTimeGapStr = "100"
+				txTimeGapStr = "200"
 			}
 			config.TxTimeGap, err = strconv.ParseUint(txTimeGapStr, 10, 64)
 			if err != nil {

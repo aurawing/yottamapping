@@ -56,7 +56,7 @@ var verifyCmd = &cobra.Command{
 		}
 		fmt.Println()
 		fmt.Println()
-		mapper := ym.NewMapper1(config.EtherscanAPIURL, config.EthURL, config.YtaContractAddr, config.MapContractAddr, config.FromIP, int(config.FromPort), config.FromUsername, config.FromPassword, config.FromDbname, config.ToIP, int(config.ToPort), config.ToUsername, config.ToPassword, config.ToDbname)
+		mapper := ym.NewMapper1(config.EtherscanAPIURL, config.EthURL, config.YtaContractAddr, config.MapContractAddr, config.FromIP, int(config.FromPort), config.FromUsername, config.FromPassword, config.FromDbname, config.ToIP, int(config.ToPort), config.ToUsername, config.ToPassword, config.ToDbname, config.TxTimeGap)
 		mapper.PullData()
 	},
 }

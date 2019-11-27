@@ -24,6 +24,14 @@ func TestGetFreezedLogs(t *testing.T) {
 	t.Logf("get freezed log successful: %s -> %s\n", event.EthAddress, event.Balance)
 }
 
+func TestGetTransferLogs(t *testing.T) {
+	logs, err := cli.GetTransferLogs(6849506, 6849606)
+	if err != nil {
+		t.Error(err.Error())
+	}
+	t.Logf("get %d transfer events\n", len(logs))
+}
+
 func TestLatestBlockNumber(t *testing.T) {
 	header, err := cli.client.HeaderByNumber(context.Background(), nil)
 	if err != nil {

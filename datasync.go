@@ -9,12 +9,13 @@ import (
 )
 
 //NewMapper1 create a new mapper structure
-func NewMapper1(apiURL, ethURL, ytaContractAddr, mapContractAddr, fromIP string, fromPort int, fromUsername, fromPassword, fromDbname, toIP string, toPort int, toUsername, toPassword, toDbname string) *Mapper {
+func NewMapper1(apiURL, ethURL, ytaContractAddr, mapContractAddr, fromIP string, fromPort int, fromUsername, fromPassword, fromDbname, toIP string, toPort int, toUsername, toPassword, toDbname string, txTimeGap uint64) *Mapper {
 	return &Mapper{
 		from:         dai.New(fromIP, fromPort, fromUsername, fromPassword, fromDbname),
 		to:           dai.New(toIP, toPort, toUsername, toPassword, toDbname),
 		ethcli:       ethc.NewClient(ethURL, ytaContractAddr, mapContractAddr),
 		etherscanCli: etherscan.NewCli(apiURL, ytaContractAddr),
+		txTimeGap:    txTimeGap,
 	}
 }
 
@@ -39,5 +40,4 @@ func (mapper *Mapper) PullData() {
 	if err != nil {
 		log.Fatalf("please check local database, error happens when committing: %s\n", err.Error())
 	}
-	log.Printf("all incremental data fetched successfully!")
 }

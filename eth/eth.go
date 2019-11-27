@@ -31,6 +31,13 @@ type FreezedLog struct {
 	Data    []byte
 }
 
+//TransferLog transfer event
+type TransferLog struct {
+	From  common.Address
+	To    common.Address
+	Value *big.Int
+}
+
 //NewClient create a new ethereum client
 func NewClient(url, ytaContractAddr, mapContractAddr string) *Cli {
 	freezedSig := []byte("Freezed(address,uint256,bytes)")
@@ -71,7 +78,7 @@ func (cli *Cli) GetFreezedLogs(from, to int) (map[string]*dai.Mapping, error) {
 	}
 	contractAbi, err := abi.JSON(strings.NewReader(string(ytm.YtmABI)))
 	if err != nil {
-		log.Fatalf("error when decode YottaCoin ABI: %s\n", err.Error())
+		log.Fatalf("error when decode YottaMapping ABI: %s\n", err.Error())
 	}
 	for _, vLog := range logs {
 		switch strings.ToLower(vLog.Topics[0].Hex()) {
@@ -90,4 +97,41 @@ func (cli *Cli) GetFreezedLogs(from, to int) (map[string]*dai.Mapping, error) {
 		}
 	}
 	return mappings, nil
+}
+
+//GetTransferLogs get transfer events
+func (cli *Cli) GetTransferLogs(from, to int) ([]*TransferLog, error) {
+	transferLogs := make([]*TransferLog, 0)
+	query := ethereum.FilterQuery{
+		FromBlock: big.NewInt(int64(from)),
+		ToBlock:   big.NewInt(int64(to)),
+		Addresses: []common.Address{
+			cli.ytaContractAddr,
+		},
+	}
+	logs, err := cli.client.FilterLogs(context.Background(), query)
+	if err != nil {
+		log.Fatalf("error when filter logs: %s\n", err.Error())
+	}
+	contractAbi, err := abi.JSON(strings.NewReader(string(ytc.YtcABI)))
+	if err != nil {
+		log.Fatalf("error when decode YottaCoin ABI: %s\n", err.Error())
+	}
+
+	transferSig := []byte("Transfer(address,address,uint256)")
+	transferSigHash := crypto.Keccak256Hash(transferSig)
+	for _, vLog := range logs {
+		switch strings.ToLower(vLog.Topics[0].Hex()) {
+		case strings.ToLower(transferSigHash.Hex()):
+			var transferEvent TransferLog
+			err := contractAbi.Unpack(&transferEvent, "Transfer", vLog.Data)
+			if err != nil {
+				log.Fatalf("error when decode transfer event ABI: %s\n", err.Error())
+			}
+			transferEvent.From = common.HexToAddress(vLog.Topics[1].Hex())
+			transferEvent.To = common.HexToAddress(vLog.Topics[2].Hex())
+			transferLogs = append(transferLogs, &transferEvent)
+		}
+	}
+	return transferLogs, nil
 }
