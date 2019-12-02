@@ -56,10 +56,12 @@ var verifyCmd = &cobra.Command{
 		}
 		fmt.Println()
 		fmt.Println()
-		mapper := ym.NewMapper1(config.EtherscanAPIURL, config.EthURL, config.YtaContractAddr, config.MapContractAddr, config.FromIP, int(config.FromPort), config.FromUsername, config.FromPassword, config.FromDbname, config.ToIP, int(config.ToPort), config.ToUsername, config.ToPassword, config.ToDbname, config.TxTimeGap)
+		mapper := ym.NewMapper1(config.EtherscanAPIURL, config.EthURL, config.YtaContractAddr, config.MapContractAddr, config.FromIP, int(config.FromPort), config.FromUsername, config.FromPassword, config.FromDbname, config.ToIP, int(config.ToPort), config.ToUsername, config.ToPassword, config.ToDbname, config.TxTimeGap, proxyURL)
 		mapper.PullData()
 	},
 }
+
+var proxyURL string
 
 func init() {
 	rootCmd.AddCommand(verifyCmd)
@@ -67,7 +69,7 @@ func init() {
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// verifyCmd.PersistentFlags().String("foo", "", "A help for foo")
-
+	verifyCmd.Flags().StringVarP(&proxyURL, "proxy-url", "p", "", "URL of HTTP proxy server")
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// verifyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")

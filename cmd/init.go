@@ -47,11 +47,11 @@ var initCmd = &cobra.Command{
 		var password string
 
 		fmt.Println("\n###### 1. 以下为上游数据库相关设置 ######")
-		fmt.Print("请输入上游同步数据库IP或域名（默认为rm-2ze0y94f9up0nyhvrto.mysql.rds.aliyuncs.com）: ")
+		fmt.Print("请输入上游同步数据库IP或域名（默认为upstream-db）: ")
 		config.FromIP, _ = reader.ReadString('\n')
 		config.FromIP = RemoveBlank(config.FromIP)
 		if config.FromIP == "" {
-			config.FromIP = "rm-2ze0y94f9up0nyhvrto.mysql.rds.aliyuncs.com"
+			config.FromIP = "upstream-db"
 		}
 
 		fmt.Print("请输入上游同步数据库端口（默认为3306）: ")
@@ -85,11 +85,11 @@ var initCmd = &cobra.Command{
 			config.FromPassword = "admin"
 		}
 
-		fmt.Print("请输入上游同步数据库名（默认为mapping）: ")
+		fmt.Print("请输入上游同步数据库名（默认为yotta_mapping）: ")
 		config.FromDbname, _ = reader.ReadString('\n')
 		config.FromDbname = RemoveBlank(config.FromDbname)
 		if config.FromDbname == "" {
-			config.FromDbname = "mapping"
+			config.FromDbname = "yottamapping"
 		}
 
 		fmt.Println("\n###### 2. 以下为本地数据库相关设置 ######")
@@ -131,19 +131,19 @@ var initCmd = &cobra.Command{
 			config.ToPassword = "admin"
 		}
 
-		fmt.Print("请输入本地数据库名（默认为mapping）: ")
+		fmt.Print("请输入本地数据库名（默认为yottamapping）: ")
 		config.ToDbname, _ = reader.ReadString('\n')
 		config.ToDbname = RemoveBlank(config.ToDbname)
 		if config.ToDbname == "" {
-			config.ToDbname = "mapping"
+			config.ToDbname = "yottamapping"
 		}
 
 		fmt.Println("\n###### 3. 以下为以太坊相关设置 ######")
-		fmt.Print("请输入Etherscan API URL（默认为http://api-cn.etherscan.com/api）: ")
+		fmt.Print("请输入Etherscan API URL（默认为http://api.etherscan.io/api）: ")
 		config.EtherscanAPIURL, _ = reader.ReadString('\n')
 		config.EtherscanAPIURL = RemoveBlank(config.EtherscanAPIURL)
 		if config.EtherscanAPIURL == "" {
-			config.EtherscanAPIURL = "http://api-cn.etherscan.com/api"
+			config.EtherscanAPIURL = "http://api.etherscan.io/api"
 		}
 
 		fmt.Print("请输入以太坊API URL（默认为https://mainnet.infura.io）: ")
@@ -160,26 +160,26 @@ var initCmd = &cobra.Command{
 			config.YtaContractAddr = "0x5edc1a266e8b2c5e8086d373725df0690af7e3ea"
 		}
 
-		fmt.Print("请输入YottaMapping合约地址（默认为0x56E5B0BDaea3c33a8EC723E2E038453E84C14bA7）: ")
+		fmt.Print("请输入YottaMapping合约地址（默认为0xBb99a5B15fC7e5E8273Cc3e380741F1899485Aea）: ")
 		config.MapContractAddr, _ = reader.ReadString('\n')
 		config.MapContractAddr = RemoveBlank(config.MapContractAddr)
 		if config.MapContractAddr == "" {
-			config.MapContractAddr = "0x56E5B0BDaea3c33a8EC723E2E038453E84C14bA7"
+			config.MapContractAddr = "0xBb99a5B15fC7e5E8273Cc3e380741F1899485Aea"
 		}
 
 		fmt.Println("\n###### 4. 以下为EOS相关设置 ######")
-		fmt.Print("请输入EOS连接URL（默认为http://47.112.119.28:8888）: ")
+		fmt.Print("请输入EOS连接URL（默认为http://yotta-api:8888）: ")
 		config.EosURL, _ = reader.ReadString('\n')
 		config.EosURL = RemoveBlank(config.EosURL)
 		if config.EosURL == "" {
-			config.EosURL = "http://47.112.119.28:8888"
+			config.EosURL = "http://yotta-api:8888"
 		}
 
-		fmt.Print("请输入管理员账号（默认为yottacreator）: ")
+		fmt.Print("请输入管理员账号（默认为yottapayresu）: ")
 		config.AdminAccount, _ = reader.ReadString('\n')
 		config.AdminAccount = RemoveBlank(config.AdminAccount)
 		if config.AdminAccount == "" {
-			config.AdminAccount = "yottacreator"
+			config.AdminAccount = "yottapayresu"
 		}
 
 		fmt.Print("请输入管理员账号私钥: ")
@@ -243,11 +243,11 @@ var initCmd = &cobra.Command{
 			break
 		}
 
-		fmt.Print("\n请输入操作账号（默认为yottaairdrop）: ")
+		fmt.Print("\n请输入操作账号（默认为ytaairdrop11）: ")
 		config.OperatorAccount, _ = reader.ReadString('\n')
 		config.OperatorAccount = RemoveBlank(config.OperatorAccount)
 		if config.OperatorAccount == "" {
-			config.OperatorAccount = "yottaairdrop"
+			config.OperatorAccount = "ytaairdrop11"
 		}
 
 		fmt.Print("请输入操作账号私钥: ")

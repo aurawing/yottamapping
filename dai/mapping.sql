@@ -23,4 +23,20 @@ CREATE TABLE `test`.`bkrange` (
   PRIMARY KEY (`id`)
 );
 
-INSERT INTO `test`.`bkrange` (`id`, `end`) VALUES ('1', '6800000');
+INSERT INTO `test`.`bkrange` (`id`, `end`) VALUES ('1', '9013803');
+
+CREATE TABLE `mapping_check`  (
+  `transactionHash` varchar(66) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `ethAddress` varchar(42) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `status` int(10) NOT NULL DEFAULT 0,
+  `ytaAccount` varchar(13) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '',
+  `txid2` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '',
+  PRIMARY KEY (`transactionHash`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+CREATE TABLE `check_block`  (
+  `id` int(11) NOT NULL DEFAULT 1,
+  `end` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+

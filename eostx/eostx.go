@@ -90,7 +90,7 @@ func (eostx *EosTX) CreateAccountTx(userAccount, userPubkey string, balance int6
 	//1. create account
 	action11 := system.NewNewAccount(eos.AN(eostx.adminAccount), eos.AN(userAccount), pubkeyu)
 	action12 := system.NewBuyRAMBytes(eos.AN(eostx.adminAccount), eos.AN(userAccount), 4096)
-	action13 := system.NewDelegateBW(eos.AN(eostx.adminAccount), eos.AN(userAccount), NewYTAAsset(eostx.cpuStake), NewYTAAsset(eostx.netStake), true)
+	action13 := system.NewDelegateBW(eos.AN(eostx.operatorAccount), eos.AN(userAccount), NewYTAAsset(eostx.cpuStake), NewYTAAsset(eostx.netStake), true)
 	actions := []*eos.Action{action11, action12, action13}
 	//2. block
 	action2s := make([]*eos.Action, 0)

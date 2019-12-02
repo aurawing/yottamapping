@@ -16,18 +16,21 @@ type Cli struct {
 	client       *http.Client
 	apiURL       string //etherscan API URL
 	contractAddr string //ERC20 token contract address
+	proxyURL     string //URL of HTTP proxy server
 }
 
 //NewCli create a new Cli structure with specified API URL and ERC20 token contract address
-func NewCli(apiURL, contractAddr string) *Cli {
-	return &Cli{client: &http.Client{}, apiURL: apiURL, contractAddr: contractAddr}
+func NewCli(apiURL, contractAddr, proxyURL string) *Cli {
+	return &Cli{client: &http.Client{}, apiURL: apiURL, contractAddr: contractAddr, proxyURL: proxyURL}
 }
 
 //GetTxList fetch all transactions of certain address
 func (cli *Cli) GetTxList(addr string, blockNumber int) []*Tx {
-	cli.client.Transport = &http.Transport{Proxy: func(_ *http.Request) (*url.URL, error) {
-		return url.Parse("http://127.0.0.1:10801")
-	}}
+	if cli.proxyURL != "" {
+		cli.client.Transport = &http.Transport{Proxy: func(_ *http.Request) (*url.URL, error) {
+			return url.Parse(cli.proxyURL)
+		}}
+	}
 	url := fmt.Sprintf("%s?module=account&action=tokentx&contractaddress=%s&address=%s&startblock=6425985&endblock=%d&sort=asc&apikey=X53VEQC87MSYAS9XY436V8QZW7MPM8UEIG", cli.apiURL, cli.contractAddr, addr, blockNumber)
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {

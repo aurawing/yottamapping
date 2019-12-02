@@ -9,12 +9,12 @@ import (
 )
 
 //NewMapper1 create a new mapper structure
-func NewMapper1(apiURL, ethURL, ytaContractAddr, mapContractAddr, fromIP string, fromPort int, fromUsername, fromPassword, fromDbname, toIP string, toPort int, toUsername, toPassword, toDbname string, txTimeGap uint64) *Mapper {
+func NewMapper1(apiURL, ethURL, ytaContractAddr, mapContractAddr, fromIP string, fromPort int, fromUsername, fromPassword, fromDbname, toIP string, toPort int, toUsername, toPassword, toDbname string, txTimeGap uint64, proxyURL string) *Mapper {
 	return &Mapper{
 		from:         dai.New(fromIP, fromPort, fromUsername, fromPassword, fromDbname),
 		to:           dai.New(toIP, toPort, toUsername, toPassword, toDbname),
 		ethcli:       ethc.NewClient(ethURL, ytaContractAddr, mapContractAddr),
-		etherscanCli: etherscan.NewCli(apiURL, ytaContractAddr),
+		etherscanCli: etherscan.NewCli(apiURL, ytaContractAddr, proxyURL),
 		txTimeGap:    txTimeGap,
 	}
 }
