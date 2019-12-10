@@ -33,7 +33,7 @@ func main2() {
 	if err != nil {
 		panic(fmt.Sprintf("读取配置文件出错：%s", err.Error()))
 	}
-	encConfig, err := cmd.AES256GCMEncrypt(config, "YottaChain20191128")
+	encConfig, err := cmd.AES256GCMEncrypt(config, "")
 	if err != nil {
 		panic(fmt.Sprintf(fmt.Sprintf("\n加密配置文件失败: %s", err.Error())))
 	}
