@@ -26,6 +26,6 @@ func TestBrowserAndModify(t *testing.T) {
 }
 
 func TestNameToString(t *testing.T) {
-	n, _ := EthAddrToName("0x941Aa12a96012f6F1A3CC1C0aFa6537974C105ea")
+	n, _ := EthAddrToName("0x941Aa12a96012f6F1A3CC0050Fa6537974C105ea")
 	fmt.Println(n)
 }

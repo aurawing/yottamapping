@@ -50,16 +50,32 @@ func NewClient(url, ytaContractAddr, mapContractAddr string) *Cli {
 }
 
 //GetFrozenTime get frozen timestamp of one address
-func (cli *Cli) GetFrozenTime(addr string) int64 {
+func (cli *Cli) GetFrozenTime(addr string) (int64, error) {
 	instance, err := ytc.NewYtc(cli.ytaContractAddr, cli.client)
 	if err != nil {
-		log.Fatalf("error when create instance of yottacoin stub: %s\n", err.Error())
+		//log.Fatalf("error when create instance of yottacoin stub: %s\n", err.Error())
+		return 0, err
 	}
 	timestamp, err := instance.GetFrozenTimestamp(nil, common.HexToAddress(addr))
 	if err != nil {
-		log.Fatalf("error when get frozen timestamp of address %s: %s\n", addr, err.Error())
+		//log.Fatalf("error when get frozen timestamp of address %s: %s\n", addr, err.Error())
+		return 0, err
 	}
-	return timestamp.Int64()
+	return timestamp.Int64(), nil
+}
+
+//GetFrozenTimeRetries get frozen timestamp of one address with retries
+func (cli *Cli) GetFrozenTimeRetries(addr string, retries int) int64 {
+	if retries == 0 {
+		log.Fatalf("error when get frozen timestamp of address: %s\n", addr)
+	}
+	t, err := cli.GetFrozenTime(addr)
+	if err != nil {
+		log.Printf("Warning: error when get frozen time: %s\n", err.Error())
+		retries--
+		return cli.GetFrozenTimeRetries(addr, retries)
+	}
+	return t
 }
 
 //GetFreezedLogs fetch all freezed logs
