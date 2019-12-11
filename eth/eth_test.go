@@ -16,7 +16,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestGetFreezedLogs(t *testing.T) {
-	m, err := cli.GetFreezedLogs(9077510, 99999999999999)
+	m, err := cli.GetFreezedLogs(9082718, 99999999999999)
 	if err != nil {
 		t.Error(err.Error())
 	}
