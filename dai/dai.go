@@ -69,7 +69,11 @@ func (dai *Dai) UpdateLocalData(mappings []*Mapping, v Verifier, from, to int) e
 		checkErr(err)
 	}
 	i := 0
+	j := 0
 	for _, m := range mappings {
+		j++
+		log.Println("\n#################################################################")
+		log.Printf("%d Verify data with transaction hash: %s\n", j, m.TransactionHash)
 		if v(m) {
 			m.Status = 1
 		} else {

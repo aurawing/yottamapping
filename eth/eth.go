@@ -78,6 +78,41 @@ func (cli *Cli) GetFrozenTimeRetries(addr string, retries int) int64 {
 	return t
 }
 
+//GetFreezedLogsAll get all frozen logs
+func (cli *Cli) GetFreezedLogsAll(from, to int) map[string]*dai.Mapping {
+	mappings := make(map[string]*dai.Mapping)
+	for {
+		end := from + 100
+		if end >= to {
+			end = to
+		}
+		m := cli.GetFreezedLogsRetry(from, end, 5)
+		log.Printf("get freezed logs from %d to %d: %d logs\n", from, end, len(m))
+		for k, v := range m {
+			mappings[k] = v
+		}
+		from = end + 1
+		if from > to {
+			break
+		}
+	}
+	return mappings
+}
+
+//GetFreezedLogsRetry fetch all freezed logs with retry
+func (cli *Cli) GetFreezedLogsRetry(from, to, retry int) map[string]*dai.Mapping {
+	if retry == 0 {
+		log.Fatalln("error when get freezed logs")
+	}
+	m, err := cli.GetFreezedLogs(from, to)
+	if err != nil {
+		log.Printf("Warning: error when get freezed logs: %s\n", err.Error())
+		retry--
+		return cli.GetFreezedLogsRetry(from, to, retry)
+	}
+	return m
+}
+
 //GetFreezedLogs fetch all freezed logs
 func (cli *Cli) GetFreezedLogs(from, to int) (map[string]*dai.Mapping, error) {
 	mappings := make(map[string]*dai.Mapping)

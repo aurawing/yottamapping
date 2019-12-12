@@ -30,13 +30,10 @@ func (mapper *Mapper) PullData() {
 	dbMappings := mapper.from.FetchNewData(toBkRange.End+1, fromBkRange.End)
 	log.Printf("fetched %d records from source database\n", len(dbMappings))
 	log.Printf("fetching frozen events from ethereum network...\n")
-	bkMappings, err := mapper.ethcli.GetFreezedLogs(toBkRange.End+1, fromBkRange.End)
-	if err != nil {
-		log.Fatalf("fetching frozen logs failed: %s\n", err.Error())
-	}
+	bkMappings := mapper.ethcli.GetFreezedLogsAll(toBkRange.End+1, fromBkRange.End)
 	log.Printf("fetched %d frozen events from ethereum network\n", len(bkMappings))
 	log.Printf("verifying and updating local database...\n")
-	err = mapper.to.UpdateLocalData(dbMappings, mapper.Verify(bkMappings), toBkRange.End+1, fromBkRange.End)
+	err := mapper.to.UpdateLocalData(dbMappings, mapper.Verify(bkMappings), toBkRange.End+1, fromBkRange.End)
 	if err != nil {
 		log.Fatalf("please check local database, error happens when committing: %s\n", err.Error())
 	}
