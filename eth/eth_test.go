@@ -16,26 +16,16 @@ func TestMain(m *testing.M) {
 }
 
 func TestGetFreezedLogs(t *testing.T) {
-	m := cli.GetFreezedLogsAll(9082718, 9088428)
+	m := cli.GetFreezedLogsAll(9097680, 9099336)
 	l := len(m)
 	// event := m["0x549f6b834b7e9bf2c0d7fc414406eb8e51b900de568fc909a277d8a0d58e2c6f"]
 	t.Logf("get freezed log successful: %d\n", l)
 }
 
 func TestGetTransferLogs(t *testing.T) {
-	alllogs := make([]*TransferLog, 0)
-	for i := 6425986; i < 9087890; {
-		//logs, err := cli.GetTransferLogs(6425986, 999999999)
-		logs, err := cli.GetTransferLogs(i, i+99)
-		if err != nil {
-			t.Error(err.Error())
-			continue
-			return
-		}
-		alllogs = append(alllogs, logs...)
-		i = i + 100
-	}
-	t.Logf("get %d transfer events\n", len(alllogs))
+	alllogs := cli.GetTransferLogsAll(6425986, 9087890)
+	l := len(alllogs)
+	t.Logf("get %d transfer events\n", l)
 }
 
 func TestLatestBlockNumber(t *testing.T) {

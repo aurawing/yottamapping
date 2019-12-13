@@ -125,11 +125,11 @@ func (cli *Cli) GetFreezedLogs(from, to int) (map[string]*dai.Mapping, error) {
 	}
 	logs, err := cli.client.FilterLogs(context.Background(), query)
 	if err != nil {
-		log.Fatalf("error when filter logs: %s\n", err.Error())
+		return nil, err
 	}
 	contractAbi, err := abi.JSON(strings.NewReader(string(ytm.YtmABI)))
 	if err != nil {
-		log.Fatalf("error when decode YottaMapping ABI: %s\n", err.Error())
+		return nil, err
 	}
 	for _, vLog := range logs {
 		switch strings.ToLower(vLog.Topics[0].Hex()) {
@@ -137,17 +137,50 @@ func (cli *Cli) GetFreezedLogs(from, to int) (map[string]*dai.Mapping, error) {
 			var freezedEvent FreezedLog
 			err := contractAbi.Unpack(&freezedEvent, "Freezed", vLog.Data)
 			if err != nil {
-				log.Fatalf("error when decode freezed event ABI: %s\n", err.Error())
+				return nil, err
 			}
 			ytaAccount, err := dai.EthAddrToName(freezedEvent.Sender.Hex())
 			if err != nil {
-				log.Fatalf("error when generate YTA account from ethereum address: %s\n", err.Error())
+				return nil, err
 			}
 			m := dai.NewMapping(vLog.TxHash.Hex(), int(vLog.BlockNumber), freezedEvent.Sender.Hex(), freezedEvent.Balance.String(), string(freezedEvent.Data), 0, "", 0, ytaAccount, "", 0, "", "", 0)
 			mappings[m.TransactionHash] = m
 		}
 	}
 	return mappings, nil
+}
+
+//GetTransferLogsAll get all transfer logs
+func (cli *Cli) GetTransferLogsAll(from, to int) []*TransferLog {
+	logs := make([]*TransferLog, 0)
+	for {
+		end := from + 999
+		if end >= to {
+			end = to
+		}
+		m := cli.GetTransferLogsRetry(from, end, 5)
+		log.Printf("get transfer logs from %d to %d: %d logs\n", from, end, len(m))
+		logs = append(logs, m...)
+		from = end + 1
+		if from > to {
+			break
+		}
+	}
+	return logs
+}
+
+//GetTransferLogsRetry fetch all transfer logs with retry
+func (cli *Cli) GetTransferLogsRetry(from, to, retry int) []*TransferLog {
+	if retry == 0 {
+		log.Fatalln("error when get transfer logs")
+	}
+	m, err := cli.GetTransferLogs(from, to)
+	if err != nil {
+		log.Printf("Warning: error when get transfer logs: %s\n", err.Error())
+		retry--
+		return cli.GetTransferLogsRetry(from, to, retry)
+	}
+	return m
 }
 
 //GetTransferLogs get transfer events
@@ -162,11 +195,11 @@ func (cli *Cli) GetTransferLogs(from, to int) ([]*TransferLog, error) {
 	}
 	logs, err := cli.client.FilterLogs(context.Background(), query)
 	if err != nil {
-		log.Fatalf("error when filter logs: %s\n", err.Error())
+		return nil, err
 	}
 	contractAbi, err := abi.JSON(strings.NewReader(string(ytc.YtcABI)))
 	if err != nil {
-		log.Fatalf("error when decode YottaCoin ABI: %s\n", err.Error())
+		return nil, err
 	}
 
 	transferSig := []byte("Transfer(address,address,uint256)")
@@ -177,7 +210,7 @@ func (cli *Cli) GetTransferLogs(from, to int) ([]*TransferLog, error) {
 			var transferEvent TransferLog
 			err := contractAbi.Unpack(&transferEvent, "Transfer", vLog.Data)
 			if err != nil {
-				log.Fatalf("error when decode transfer event ABI: %s\n", err.Error())
+				return nil, err
 			}
 			transferEvent.From = common.HexToAddress(vLog.Topics[1].Hex())
 			transferEvent.To = common.HexToAddress(vLog.Topics[2].Hex())
