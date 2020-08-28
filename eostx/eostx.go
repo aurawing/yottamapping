@@ -56,7 +56,9 @@ func (eostx *EosTX) IfTransactioIrreversible(txid string) bool {
 	if err != nil {
 		log.Fatalf("error happens when get transaction information: %s\n", err.Error())
 	}
-
+	if resp.Receipt.Status != eos.TransactionStatusExecuted {
+		return false
+	}
 	blockResp, err := eostx.API.GetBlockByNum(resp.BlockNum)
 	if err != nil {
 		log.Fatalf("error happens when get block by number from transaction information: %s\n", err.Error())
@@ -66,7 +68,6 @@ func (eostx *EosTX) IfTransactioIrreversible(txid string) bool {
 			return resp.LastIrreversibleBlock > resp.BlockNum
 		}
 	}
-
 	return false
 }
 
